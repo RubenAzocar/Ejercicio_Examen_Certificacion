@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador Certificacion Full Stack JavaScript Junior</title>
+    <link rel="stylesheet" href="views/styles.css">
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Desarrollo Full Stack JavaScript – 119 min Total</h1>
+      <p class="subtitle">Certificacion 2026 | Detalle Modulos, tipo de pregunta y tiempos.</p>
+    </section>
+
+    <div class="layout">
+      <main class="main-column">
+    <section class="table-card">
+      <h2>Tabla de modulos</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombre del modulo</th>
+            <th>Tipo de preguntas</th>
+            <th>Cantidad preguntas</th>
+            <th>Tiempo</th>
+          </tr>
+        </thead>
+        <tbody id="modulesTableBody"></tbody>
+      </table>
+
+      <div class="controls">
+        <label for="moduleSelect">Selector de modulo:</label>
+        <select id="moduleSelect"></select>
+        <button id="startBtn" class="btn-primary">Iniciar modulo</button>
+      </div>
+      <p class="small">Sugerencia: al iniciar un modulo, se carga su temporizador independiente y no comparte respuestas con otros modulos.</p>
+    </section>
+
+    <section id="examSection" class="exam-card hidden">
+      <div class="status-row">
+        <div>
+          <span class="pill" id="moduleBadge"></span>
+          <span class="pill" id="progressBadge"></span>
+        </div>
+        <div>
+          <span class="timer" id="timerLabel">00:00</span>
+        </div>
+      </div>
+
+      <div class="controls" style="margin-top:0;">
+        <button id="pauseBtn" class="btn-warning">Pausar</button>
+        <button id="resumeBtn" class="btn-primary" disabled>Reanudar</button>
+        <button id="finishBtn">Finalizar modulo</button>
+      </div>
+
+      <article class="question-card">
+        <p id="questionType" class="question-type"></p>
+        <p id="questionTitle" class="question-title"></p>
+        <div class="guide-row">
+          <button id="hintBtn" type="button">Mostrar pista</button>
+          <button id="explainBtn" type="button">Explicar pregunta</button>
+        </div>
+        <div id="hintText" class="hint-box hidden"></div>
+        <div id="questionBody"></div>
+        <div id="codeCoachBox" class="coach-box hidden"></div>
+        <div id="lineByLineBox" class="line-guide hidden"></div>
+        <div id="checklistBox" class="checklist hidden"></div>
+      </article>
+
+      <div class="nav-row">
+        <button id="prevBtn">Anterior pregunta</button>
+        <button id="nextBtn" class="btn-primary">Siguiente pregunta</button>
+      </div>
+    </section>
+
+    <section id="resultSection" class="result-card hidden">
+      <h2>Resultado del modulo</h2>
+      <p id="scoreLine"></p>
+      <p id="timeLine"></p>
+      <div id="feedbackList"></div>
+    </section>
+      </main>
+
+      <aside class="sidebar">
+        <h3>Guia Pedagogica</h3>
+        <p class="sidebar-note">Refuerzo paso a paso para resolver codigo y responder seleccion multiple con criterio tecnico.</p>
+
+        <div class="sidebar-block">
+          <strong id="sideModule">Modulo: General</strong>
+          <p id="sideQuestionType" class="sidebar-note">Selecciona un modulo para comenzar.</p>
+        </div>
+
+        <div class="sidebar-block">
+          <strong>Paso a paso sugerido</strong>
+          <ol id="sideSteps" class="sidebar-steps"></ol>
+        </div>
+
+        <div class="sidebar-block">
+          <strong>Concepto clave</strong>
+          <p id="sideConcept" class="sidebar-note">Se mostrara una explicacion breve y practica del tema actual.</p>
+        </div>
+
+        <div class="sidebar-block">
+          <strong>Explicacion ad hoc</strong>
+          <p id="sideAdhoc" class="sidebar-note">Cuando respondas, aqui veras retroalimentacion contextual para afianzar conceptos.</p>
+        </div>
+
+        <div class="sidebar-block">
+          <strong>Guia linea a linea</strong>
+          <div id="sideLineByLine" class="line-guide">
+            <p class="sidebar-note">En preguntas de codigo veras una plantilla detallada por lineas para interiorizar estructura y sintaxis.</p>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <strong>Nivel de ayuda</strong>
+          <select id="helpLevelSelect" aria-label="Nivel de ayuda">
+            <option value="basico">Basico</option>
+            <option value="intermedio" selected>Intermedio</option>
+            <option value="guiado">Guiado</option>
+          </select>
+          <p class="sidebar-note" style="margin-top:6px;">Basico: menos pistas | Guiado: mas detalle paso a paso.</p>
+        </div>
+
+        <div class="sidebar-block">
+          <strong>Metricas de aprendizaje</strong>
+          <p id="sideMetrics" class="sidebar-note">Respondidas: 0 | Aciertos iniciales: 0</p>
+        </div>
+
+        <div class="sidebar-block">
+          <strong>Atajos rapidos</strong>
+          <p class="sidebar-note">H: pista | E: explicacion | Flechas: navegar preguntas.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+    <script src="models/examModel.js"></script>
+  <script src="views/examView.js"></script>
+  <script src="controllers/examController.js"></script>
+</body>
+</html>
+

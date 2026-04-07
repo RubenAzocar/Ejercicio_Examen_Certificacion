@@ -1,0 +1,787 @@
+(function () {
+    const { MODULES, BASE_QUESTION_BANK, state } = globalThis.AppModel;
+    const {
+        modulesTableBody,
+        moduleSelect,
+        startBtn,
+        examSection,
+        resultSection,
+        moduleBadge,
+        progressBadge,
+        timerLabel,
+        questionType,
+        questionTitle,
+        questionBody,
+        prevBtn,
+        nextBtn,
+        pauseBtn,
+        resumeBtn,
+        finishBtn,
+        hintBtn,
+        explainBtn,
+        hintText,
+        checklistBox,
+        codeCoachBox,
+        lineByLineBox,
+        scoreLine,
+        timeLine,
+        feedbackList,
+        sideModule,
+        sideQuestionType,
+        sideSteps,
+        sideConcept,
+        sideAdhoc,
+        sideLineByLine,
+        helpLevelSelect,
+        sideMetrics
+    } = globalThis.AppView;
+
+    const MODULE_CONCEPTS = {
+        1: "Domina estructura semantica HTML, estilos CSS base y logica JavaScript simple para construir interfaces limpias.",
+        2: "Enfocate en sintaxis, tipos de variables y metodos de arrays como map/filter/reduce.",
+        3: "Prioriza asincronia, funciones de orden superior y patrones comunes como debounce y manejo de errores.",
+        4: "Relaciona SELECT, WHERE, JOIN, GROUP BY y restricciones para modelar datos consistentes.",
+        5: "Comprende flujo request/response en Express, middlewares y codigos HTTP mas usados.",
+        6: "Practica acceso seguro a datos: consultas parametrizadas, capas de servicio y reutilizacion de conexiones.",
+        7: "Consolida criterios REST: verbos HTTP, codigos de estado, validaciones y contrato de endpoints."
+    };
+
+    function setSidebarSteps(items) {
+        sideSteps.innerHTML = "";
+        items.forEach((step) => {
+            const li = document.createElement("li");
+            li.textContent = step;
+            sideSteps.appendChild(li);
+        });
+    }
+
+    function getHelpLevel() {
+        return helpLevelSelect.value || "intermedio";
+    }
+
+    function getGuideLineLimit(level, zone) {
+        if (zone === "sidebar") {
+            if (level === "basico") return 6;
+            if (level === "intermedio") return 10;
+            return 20;
+        }
+
+        if (level === "basico") return 8;
+        if (level === "intermedio") return 12;
+        return 20;
+    }
+
+    function adaptStepsByHelpLevel(steps) {
+        const level = getHelpLevel();
+        if (level === "basico") return steps.slice(0, 2);
+        if (level === "guiado") {
+            return steps.concat([
+                "Haz una mini validacion final antes de avanzar.",
+                "Si dudas, justifica tu respuesta en voz alta en una frase."
+            ]);
+        }
+        return steps;
+    }
+
+    function updateLearningMetrics() {
+        const answeredCount = Object.keys(state.answers).filter((k) => state.answers[k] !== undefined && state.answers[k] !== "").length;
+        const initialHits = Object.values(state.firstAttemptResult).filter(Boolean).length;
+        sideMetrics.textContent = "Respondidas: " + answeredCount + " | Aciertos iniciales: " + initialHits;
+    }
+
+    function escapeHtml(text) {
+        return String(text)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll("\"", "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    function buildCodeLineGuide(q) {
+        const prompt = (q.prompt || "").toLowerCase();
+
+        if (prompt.includes("html + css")) {
+            return {
+                title: "Plantilla guiada: HTML + CSS + JS integrado",
+                lines: [
+                    { code: "<!doctype html>", what: "Que: declaras el tipo de documento HTML5.", why: "Por que: asegura que el navegador interprete el layout en modo estandar." },
+                    { code: "<html lang=\"es\">", what: "Que: abres el nodo raiz e indicas idioma.", why: "Por que: mejora accesibilidad, lectores de pantalla y SEO." },
+                    { code: "<head>", what: "Que: inicias cabecera de configuracion.", why: "Por que: aqui va metadata, titulo y estilos globales." },
+                    { code: "  <meta charset=\"UTF-8\">", what: "Que: defines codificacion de caracteres.", why: "Por que: evita errores con tildes, eñes y simbolos." },
+                    { code: "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">", what: "Que: configuras viewport responsive.", why: "Por que: en movil evita zoom raro y ajusta el ancho al dispositivo." },
+                    { code: "  <title>Componente UI</title>", what: "Que: agregas titulo del documento.", why: "Por que: identifica la pestaña y mejora navegacion del usuario." },
+                    { code: "  <style>", what: "Que: abres bloque CSS embebido.", why: "Por que: defines estilo local sin archivo externo." },
+                    { code: "    :root { --fondo: #f8fafc; --acento: #0f766e; }", what: "Que: declaras variables CSS.", why: "Por que: facilitan consistencia de color y mantenimiento." },
+                    { code: "    .bloque { padding: 16px; border-radius: 10px; background: var(--fondo); }", what: "Que: creas clase base del contenedor.", why: "Por que: separa estructura (HTML) de apariencia (CSS)." },
+                    { code: "    .boton { background: var(--acento); color: #fff; }", what: "Que: estilizas elemento interactivo.", why: "Por que: el CTA debe tener jerarquia visual clara." },
+                    { code: "  </style>", what: "Que: cierras bloque CSS.", why: "Por que: delimitas correctamente estilos del documento." },
+                    { code: "</head>", what: "Que: cierras cabecera.", why: "Por que: separas configuracion de contenido visible." },
+                    { code: "<body>", what: "Que: inicias el cuerpo visible de la pagina.", why: "Por que: todo lo que ve el usuario vive en body." },
+                    { code: "  <section class=\"bloque\">", what: "Que: abres una seccion semantica.", why: "Por que: section comunica que el contenido pertenece a un bloque tematico." },
+                    { code: "    <h2>Titulo del bloque</h2>", what: "Que: agregas encabezado del bloque.", why: "Por que: aporta jerarquia semantica y escaneabilidad." },
+                    { code: "    <p>Descripcion breve</p>", what: "Que: agregas texto explicativo.", why: "Por que: da contexto al usuario antes de actuar." },
+                    { code: "    <button class=\"boton\" id=\"accionBtn\">Accion</button>", what: "Que: defines control interactivo.", why: "Por que: conecta estructura HTML con logica JS por id/clase." },
+                    { code: "  </section>", what: "Que: cierras seccion.", why: "Por que: mantienes arbol DOM limpio y predecible." },
+                    { code: "  <script>", what: "Que: abres JavaScript embebido.", why: "Por que: agregas comportamiento sin archivo externo." },
+                    { code: "    const btn = document.getElementById(\"accionBtn\");", what: "Que: capturas referencia del boton.", why: "Por que: necesitas el nodo para escuchar eventos." },
+                    { code: "    btn.addEventListener(\"click\", () => alert(\"Accion ejecutada\"));", what: "Que: registras evento click.", why: "Por que: conviertes HTML estatico en experiencia interactiva." },
+                    { code: "  </" + "script>", what: "Que: cierras JavaScript.", why: "Por que: finaliza el bloque de logica del documento." },
+                    { code: "</body></html>", what: "Que: cierras body y html.", why: "Por que: completas la estructura valida del documento." }
+                ]
+            };
+        }
+
+        return {
+            title: "Plantilla guiada: Funcion JavaScript paso a paso",
+            lines: [
+                { code: "function resolverProblema(entrada) {", what: "Que: declaras funcion principal con parametro de entrada.", why: "Por que: explicita el contrato de datos que recibes." },
+                { code: "  // validar entrada", what: "Que: documentas la etapa de validacion.", why: "Por que: ayuda a dividir el algoritmo en bloques mentales." },
+                { code: "  if (!Array.isArray(entrada)) return [];", what: "Que: validas tipo de dato esperado.", why: "Por que: evita errores de ejecucion por entrada invalida." },
+                { code: "  const resultado = [];", what: "Que: inicializas estructura de salida.", why: "Por que: separa claramente datos originales de datos procesados." },
+                { code: "  for (let i = 0; i < entrada.length; i += 1) {", what: "Que: recorres cada elemento del array.", why: "Por que: permite aplicar la regla de negocio item por item." },
+                { code: "    const item = entrada[i];", what: "Que: guardas el elemento actual.", why: "Por que: mejora legibilidad y evita repetir expresiones." },
+                { code: "    const cumple = condicion(item);", what: "Que: evalúas la condicion del enunciado.", why: "Por que: desacoplas validacion de la transformacion." },
+                { code: "    if (cumple) {", what: "Que: abres bloque condicional.", why: "Por que: procesas solo los elementos que aplican." },
+                { code: "      const nuevo = transformar(item);", what: "Que: transformas el dato.", why: "Por que: materializas la regla pedida por la pregunta." },
+                { code: "      resultado.push(nuevo);", what: "Que: agregas el resultado parcial.", why: "Por que: construyes la salida final de forma incremental." },
+                { code: "    }", what: "Que: cierras condicional.", why: "Por que: delimitas el alcance de la regla de negocio." },
+                { code: "  }", what: "Que: cierras bucle principal.", why: "Por que: finaliza recorrido de todos los elementos." },
+                { code: "  return resultado;", what: "Que: devuelves la salida.", why: "Por que: toda funcion debe retornar el formato pedido por enunciado." },
+                { code: "}", what: "Que: cierras la funcion.", why: "Por que: completa la estructura sintactica del lenguaje." }
+            ]
+        };
+    }
+
+    function getGuideProgressIndex(answer, q, guide, maxLines) {
+        const safeGuideLen = Math.max(1, Math.min(guide.lines.length, maxLines));
+        if (!answer || typeof answer !== "string") return 0;
+
+        const nonEmptyLines = answer
+            .split("\n")
+            .map((line) => line.trim())
+            .filter((line) => line.length > 0).length;
+
+        const normalized = answer.toLowerCase();
+        const expected = q.expectedKeywords || [];
+        const matched = expected.filter((kw) => normalized.includes(String(kw).toLowerCase())).length;
+        const keywordRatio = expected.length > 0 ? matched / expected.length : 0;
+
+        const byLines = Math.max(0, nonEmptyLines - 1);
+        const byKeywords = Math.floor(keywordRatio * safeGuideLen);
+        const progress = Math.max(byLines, byKeywords);
+
+        return Math.min(safeGuideLen - 1, progress);
+    }
+
+    function renderProgressiveLineGuide(container, guide, maxLines, currentIndex) {
+        container.innerHTML = "";
+
+        const title = document.createElement("strong");
+        title.textContent = guide.title;
+        container.appendChild(title);
+
+        const total = Math.max(1, Math.min(guide.lines.length, maxLines));
+        const status = document.createElement("p");
+        status.className = "sidebar-note";
+        status.textContent = "Paso actual: " + (currentIndex + 1) + " / " + total;
+        container.appendChild(status);
+
+        const line = guide.lines[currentIndex];
+        if (!line) return;
+
+        const row = document.createElement("div");
+        row.className = "line-guide-item";
+
+        const code = document.createElement("code");
+        code.innerHTML = escapeHtml(line.code);
+
+        const detail = document.createElement("p");
+        if (line.what || line.why) {
+            detail.innerHTML = "<strong>" + escapeHtml(line.what || "") + "</strong><br>" + escapeHtml(line.why || "");
+        } else {
+            detail.textContent = line.explain;
+        }
+
+        row.appendChild(code);
+        row.appendChild(detail);
+        container.appendChild(row);
+    }
+
+    function updateProgressiveGuides(answer, q) {
+        if (q?.type !== "code") return;
+
+        const level = getHelpLevel();
+        const mainMaxLines = getGuideLineLimit(level, "main");
+        const sideMaxLines = getGuideLineLimit(level, "sidebar");
+        const guide = buildCodeLineGuide(q);
+
+        const mainIndex = getGuideProgressIndex(answer, q, guide, mainMaxLines);
+        const sideIndex = getGuideProgressIndex(answer, q, guide, sideMaxLines);
+
+        renderProgressiveLineGuide(lineByLineBox, guide, mainMaxLines, mainIndex);
+        renderProgressiveLineGuide(sideLineByLine, guide, sideMaxLines, sideIndex);
+
+        lineByLineBox.classList.remove("hidden");
+    }
+
+    function getCodeGuidance(q) {
+        if ((q.prompt || "").toLowerCase().includes("html + css")) {
+            return {
+                steps: [
+                    "Identifica la estructura minima: contenedor, contenido y accion.",
+                    "Escribe primero el HTML semantico y luego aplica CSS progresivo.",
+                    "Añade responsive basico con ancho flexible o media query.",
+                    "Revisa accesibilidad minima: alt, labels o contraste suficiente."
+                ],
+                adhoc: "Para retos HTML/CSS, primero estructura y despues apariencia. Evita empezar por detalles visuales avanzados."
+            };
+        }
+
+        return {
+            steps: [
+                "Subraya entrada, proceso y salida que pide el enunciado.",
+                "Define una funcion con nombre claro y parametros adecuados.",
+                "Resuelve en pequeño: prueba mental con un caso simple.",
+                "Valida borde minimo (array vacio, null o valor no esperado)."
+            ],
+            adhoc: "En codigo JS junior se evalua claridad y logica correcta mas que optimizaciones complejas."
+        };
+    }
+
+    function getSingleGuidance(answered, isCorrect, q) {
+        const base = {
+            steps: [
+                "Detecta la palabra clave tecnica de la pregunta.",
+                "Descarta opciones evidentemente falsas primero.",
+                "Compara dos finalistas con una regla concreta.",
+                "Elige la opcion y justificala en una frase corta."
+            ],
+            adhoc: "Tip: no memorices solo respuestas; memoriza por que una opcion es correcta en contexto real."
+        };
+
+        if (!answered) return base;
+
+        if (isCorrect) {
+            return {
+                ...base,
+                adhoc: "Correcto. Tu seleccion coincide con el concepto clave: " + q.explanation
+            };
+        }
+
+        return {
+            ...base,
+            adhoc: "Respuesta no valida. Revisa la diferencia conceptual entre opciones: " + q.explanation
+        };
+    }
+
+    function updateSidebarForQuestion() {
+        if (!state.module || !state.questions.length) {
+            sideModule.textContent = "Modulo: General";
+            sideQuestionType.textContent = "Selecciona un modulo para comenzar.";
+            sideConcept.textContent = "Se mostrara una explicacion breve y practica del tema actual.";
+            sideAdhoc.textContent = "Cuando respondas, aqui veras retroalimentacion contextual para afianzar conceptos.";
+            setSidebarSteps(adaptStepsByHelpLevel([
+                "Selecciona el modulo que quieres practicar.",
+                "Lee el enunciado completo antes de responder.",
+                "Usa pistas y checklist para guiar tu solucion.",
+                "Finaliza y analiza la retroalimentacion del sistema."
+            ]));
+            updateLearningMetrics();
+            return;
+        }
+
+        const q = state.questions[state.currentIndex];
+        sideModule.textContent = "Modulo " + state.module.id + ": " + state.module.name;
+        sideQuestionType.textContent = "Pregunta " + (state.currentIndex + 1) + " de " + state.questions.length + " | Tipo: " + (q.type === "code" ? "Codigo" : "Seleccion multiple");
+        sideConcept.textContent = MODULE_CONCEPTS[state.module.id] || "Aplica fundamentos de logica, sintaxis y buenas practicas.";
+
+        if (q.type === "code") {
+            const guidance = getCodeGuidance(q);
+            setSidebarSteps(adaptStepsByHelpLevel(guidance.steps));
+            sideAdhoc.textContent = guidance.adhoc + " Estructura recomendada: define, valida, procesa y retorna/representa resultado con claridad.";
+
+            updateProgressiveGuides(state.answers[state.currentIndex] || "", q);
+
+            updateLearningMetrics();
+            return;
+        }
+
+        const answered = typeof state.answers[state.currentIndex] === "number";
+        const isCorrect = answered && state.answers[state.currentIndex] === q.answer;
+        const guidance = getSingleGuidance(answered, isCorrect, q);
+        setSidebarSteps(adaptStepsByHelpLevel(guidance.steps));
+        sideAdhoc.textContent = guidance.adhoc;
+        sideLineByLine.innerHTML = "<p class='sidebar-note'>Esta pregunta no requiere codigo linea a linea. Enfocate en concepto, descarte de distractores y justificacion tecnica.</p>";
+        updateLearningMetrics();
+    }
+
+    function renderCodeCoach(inputText, q) {
+        if (q.type !== "code") {
+            codeCoachBox.classList.add("hidden");
+            codeCoachBox.innerHTML = "";
+            return;
+        }
+
+        const text = (inputText || "").toLowerCase();
+        const expected = q.expectedKeywords || [];
+        const matched = expected.filter((kw) => text.includes(String(kw).toLowerCase()));
+        const ratio = expected.length ? Math.round((matched.length / expected.length) * 100) : 0;
+        const missing = expected.filter((kw) => !matched.includes(kw));
+
+        codeCoachBox.innerHTML = "";
+
+        const title = document.createElement("strong");
+        title.textContent = "Coach de codigo en tiempo real";
+
+        const progress = document.createElement("p");
+        progress.textContent = "Progreso estimado de cobertura: " + ratio + "%";
+
+        const list = document.createElement("ul");
+        matched.slice(0, 6).forEach((m) => {
+            const li = document.createElement("li");
+            li.className = "coach-good";
+            li.textContent = "Bien: detectado " + m;
+            list.appendChild(li);
+        });
+
+        missing.slice(0, 6).forEach((m) => {
+            const li = document.createElement("li");
+            li.className = "coach-miss";
+            li.textContent = "Falta reforzar: " + m;
+            list.appendChild(li);
+        });
+
+        codeCoachBox.appendChild(title);
+        codeCoachBox.appendChild(progress);
+        codeCoachBox.appendChild(list);
+        codeCoachBox.classList.remove("hidden");
+    }
+
+    function buildQuestionExplanation(q) {
+        const level = getHelpLevel();
+        let base = "Explicacion: " + q.explanation;
+        if (q.type === "single" && q.options) {
+            base += " Opcion correcta: " + q.options[q.answer] + ".";
+        }
+
+        if (q.type === "code") {
+            base += " Secuencia detallada: 1) define estructura base, 2) valida entradas, 3) implementa logica principal, 4) prueba con caso feliz y caso borde, 5) refactoriza nombres y formato.";
+        }
+
+        if (level === "basico") return base;
+        if (level === "guiado") {
+            return base + " Enfoque guiado detallado: escribe una version minima funcional por bloques pequeños, integra CSS/JS en HTML solo despues de validar la estructura semantica, y comprueba cada linea critica antes de continuar.";
+        }
+        return base + " Enfoque recomendado: conecta la respuesta con un caso real de desarrollo junior, explica por que tu solucion cumple el enunciado y por que descartas alternativas.";
+    }
+
+    function shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i -= 1) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+        return arr;
+    }
+
+    function generateRandomHtmlCssChallenge() {
+        const components = [
+            {
+                name: "tarjeta de producto",
+                htmlKeywords: ["<article", "<h3", "<p", "<button"],
+                cssKeywords: ["border-radius", "padding", "box-shadow"],
+                hint: "Usa article para el contenedor, un titulo h3, descripcion y un boton de accion."
+            },
+            {
+                name: "barra de navegacion",
+                htmlKeywords: ["<nav", "<ul", "<li", "<a"],
+                cssKeywords: ["display", "justify-content", "gap"],
+                hint: "Crea una estructura nav > ul > li > a y usa flex para distribuir enlaces."
+            },
+            {
+                name: "formulario de registro",
+                htmlKeywords: ["<form", "<label", "<input", "<button"],
+                cssKeywords: ["display", "flex-direction", "margin"],
+                hint: "Relaciona label e input con for/id y apila campos con flex en columna."
+            },
+            {
+                name: "seccion hero",
+                htmlKeywords: ["<section", "<h1", "<p", "<a"],
+                cssKeywords: ["background", "padding", "text-align"],
+                hint: "Incluye titulo, texto de apoyo y enlace CTA con estilos de espaciado."
+            }
+        ];
+
+        const colorThemes = ["azul y gris", "verde y blanco", "naranja y oscuro", "cian y negro"];
+        const c = components[Math.floor(Math.random() * components.length)];
+        const theme = colorThemes[Math.floor(Math.random() * colorThemes.length)];
+
+        return {
+            type: "code",
+            prompt: "Escribe un bloque HTML + CSS para una " + c.name + " responsive de nivel junior. Usa una paleta " + theme + " y aplica buenas practicas semanticas.",
+            expectedKeywords: ["<", "</", "{"].concat(c.htmlKeywords).concat(c.cssKeywords),
+            explanation: "Se evalua estructura HTML semantica, estilos CSS basicos y legibilidad del codigo.",
+            hint: c.hint,
+            checklist: [
+                "Usa etiquetas HTML semanticas apropiadas.",
+                "Aplica al menos 3 reglas CSS de layout/espaciado.",
+                "Incluye un elemento interactivo (boton o enlace).",
+                "Hazlo legible en movil (ancho flexible o media query)."
+            ]
+        };
+    }
+
+    function randomizeSingleChoiceQuestion(q) {
+        const optionsWithIndex = q.options.map((text, idx) => ({ text, originalIdx: idx }));
+        shuffleArray(optionsWithIndex);
+        return {
+            ...q,
+            options: optionsWithIndex.map((o) => o.text),
+            answer: optionsWithIndex.findIndex((o) => o.originalIdx === q.answer)
+        };
+    }
+
+    function buildQuestionsForModule(moduleId) {
+        const moduleCfg = MODULES.find((m) => m.id === moduleId);
+        if (!moduleCfg) return [];
+
+        const basePool = structuredClone(BASE_QUESTION_BANK[moduleId] || []);
+
+        // Modulos con codigo reciben retos HTML/CSS dinamicos adicionales en cada recarga.
+        const generated = [];
+        if (moduleId === 1) {
+            generated.push(generateRandomHtmlCssChallenge(), generateRandomHtmlCssChallenge(), generateRandomHtmlCssChallenge());
+        }
+        if (moduleId === 3) {
+            generated.push(generateRandomHtmlCssChallenge(), generateRandomHtmlCssChallenge());
+        }
+
+        const pool = shuffleArray(basePool.concat(generated));
+        const selected = pool.slice(0, moduleCfg.count).map((q) => {
+            if (q.type === "single") return randomizeSingleChoiceQuestion(q);
+            return q;
+        });
+
+        return selected;
+    }
+
+    function buildModulesView() {
+        modulesTableBody.innerHTML = "";
+        moduleSelect.innerHTML = "";
+
+        MODULES.forEach((m) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = ""
+                + "<td>" + m.id + "</td>"
+                + "<td>" + m.name + "</td>"
+                + "<td>" + m.type + "</td>"
+                + "<td>" + m.count + "</td>"
+                + "<td>" + m.minutes + " min</td>";
+            modulesTableBody.appendChild(tr);
+
+            const opt = document.createElement("option");
+            opt.value = String(m.id);
+            opt.textContent = m.id + " - " + m.name;
+            moduleSelect.appendChild(opt);
+        });
+    }
+
+    function formatTime(seconds) {
+        const m = Math.floor(seconds / 60);
+        const s = Math.max(0, seconds % 60);
+        return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+    }
+
+    function startModule(moduleId) {
+        const selected = MODULES.find((m) => m.id === moduleId);
+        if (!selected) return;
+
+        state.module = selected;
+        state.questions = buildQuestionsForModule(moduleId);
+        state.currentIndex = 0;
+        state.answers = {};
+        state.firstAttemptResult = {};
+        state.submitted = false;
+
+        state.timer.totalSeconds = selected.minutes * 60;
+        state.timer.remainingSeconds = selected.minutes * 60;
+        state.timer.startedAt = Date.now();
+        state.timer.paused = false;
+        state.timer.endAt = Date.now() + state.timer.remainingSeconds * 1000;
+
+        examSection.classList.remove("hidden");
+        resultSection.classList.add("hidden");
+
+        moduleBadge.textContent = "Modulo " + selected.id + ": " + selected.name;
+
+        clearInterval(state.timer.intervalId);
+        state.timer.intervalId = setInterval(tick, 250);
+
+        renderQuestion();
+        updateTimerUI();
+        updateSidebarForQuestion();
+        pauseBtn.disabled = false;
+        resumeBtn.disabled = true;
+    }
+
+    function tick() {
+        if (state.timer.paused || state.submitted) return;
+
+        const now = Date.now();
+        const diffMs = state.timer.endAt - now;
+        state.timer.remainingSeconds = Math.max(0, Math.ceil(diffMs / 1000));
+        updateTimerUI();
+
+        if (state.timer.remainingSeconds <= 0) {
+            finalizeModule(true);
+        }
+    }
+
+    function updateTimerUI() {
+        timerLabel.textContent = formatTime(state.timer.remainingSeconds);
+        timerLabel.classList.toggle("low", state.timer.remainingSeconds <= 60);
+    }
+
+    function renderQuestion() {
+        const q = state.questions[state.currentIndex];
+        if (!q) return;
+
+        progressBadge.textContent = "Pregunta " + (state.currentIndex + 1) + "/" + state.questions.length;
+        questionType.textContent = "Tipo: " + (q.type === "code" ? "Codigo" : "Seleccion multiple");
+        questionTitle.textContent = q.prompt;
+        hintText.classList.add("hidden");
+        hintText.textContent = q.hint || q.explanation || "Piensa en los conceptos base del modulo y responde paso a paso.";
+        hintBtn.textContent = "Mostrar pista";
+
+        questionBody.innerHTML = "";
+        checklistBox.innerHTML = "";
+        checklistBox.classList.add("hidden");
+        codeCoachBox.classList.add("hidden");
+        codeCoachBox.innerHTML = "";
+        lineByLineBox.classList.add("hidden");
+        lineByLineBox.innerHTML = "";
+
+        if (q.type === "code") {
+            const list = q.checklist || [
+                "Declara una solucion completa y legible.",
+                "Usa sintaxis correcta de JavaScript/HTML/CSS.",
+                "Incluye retorno o salida verificable segun el enunciado."
+            ];
+
+            const ckTitle = document.createElement("strong");
+            ckTitle.textContent = "Checklist de evaluacion:";
+            const ul = document.createElement("ul");
+            list.forEach((item) => {
+                const li = document.createElement("li");
+                li.textContent = item;
+                ul.appendChild(li);
+            });
+            checklistBox.appendChild(ckTitle);
+            checklistBox.appendChild(ul);
+            checklistBox.classList.remove("hidden");
+
+            const area = document.createElement("textarea");
+            area.placeholder = "Escribe aqui tu solucion...";
+            area.value = state.answers[state.currentIndex] || "";
+            renderCodeCoach(area.value, q);
+            updateProgressiveGuides(area.value, q);
+            area.addEventListener("input", (e) => {
+                state.answers[state.currentIndex] = e.target.value;
+                renderCodeCoach(e.target.value, q);
+                updateProgressiveGuides(e.target.value, q);
+                updateLearningMetrics();
+            });
+            questionBody.appendChild(area);
+        } else {
+            const wrap = document.createElement("div");
+            wrap.className = "options";
+
+            const selected = state.answers[state.currentIndex];
+
+            q.options.forEach((optText, idx) => {
+                const label = document.createElement("label");
+                label.className = "opt" + (selected === idx ? " selected" : "");
+
+                const input = document.createElement("input");
+                input.type = "radio";
+                input.name = "q_" + state.currentIndex;
+                input.checked = selected === idx;
+                input.addEventListener("change", () => {
+                    state.answers[state.currentIndex] = idx;
+                    if (state.firstAttemptResult[state.currentIndex] === undefined) {
+                        state.firstAttemptResult[state.currentIndex] = idx === q.answer;
+                    }
+                    // Actualiza visual de opciones sin re-renderizar la pregunta completa
+                    // (evita cerrar la pista o explicacion que el usuario tenga abierta)
+                    for (const el of wrap.querySelectorAll(".opt")) { el.classList.remove("selected"); }
+                    label.classList.add("selected");
+                    updateSidebarForQuestion();
+                    updateLearningMetrics();
+                });
+
+                const span = document.createElement("span");
+                span.textContent = optText;
+
+                label.appendChild(input);
+                label.appendChild(span);
+                wrap.appendChild(label);
+            });
+
+            questionBody.appendChild(wrap);
+        }
+
+        prevBtn.disabled = state.currentIndex === 0;
+        nextBtn.disabled = state.currentIndex === state.questions.length - 1;
+        updateSidebarForQuestion();
+    }
+
+    function toggleHint() {
+        hintText.classList.toggle("hidden");
+        hintBtn.textContent = hintText.classList.contains("hidden") ? "Mostrar pista" : "Ocultar pista";
+    }
+
+    function explainCurrentQuestion() {
+        const q = state.questions[state.currentIndex];
+        if (!q) return;
+        hintText.textContent = buildQuestionExplanation(q);
+        hintText.classList.remove("hidden");
+        hintBtn.textContent = "Ocultar pista";
+        sideAdhoc.textContent = "Modo explicacion activa: revisa la logica y vuelve a intentar sin memorizar la opcion.";
+    }
+
+    function pauseTimer() {
+        if (state.timer.paused || state.submitted) return;
+        state.timer.paused = true;
+        clearInterval(state.timer.intervalId);
+        pauseBtn.disabled = true;
+        resumeBtn.disabled = false;
+    }
+
+    function resumeTimer() {
+        if (!state.timer.paused || state.submitted) return;
+        state.timer.paused = false;
+        state.timer.endAt = Date.now() + state.timer.remainingSeconds * 1000;
+        state.timer.intervalId = setInterval(tick, 250);
+        pauseBtn.disabled = false;
+        resumeBtn.disabled = true;
+    }
+
+    function evaluateQuestion(q, answer) {
+        if (q.type === "code") {
+            if (!answer || typeof answer !== "string") {
+                return { ok: false, msg: "Sin respuesta de codigo." };
+            }
+
+            const normalized = answer.toLowerCase();
+            const hasAll = q.expectedKeywords.every((kw) => normalized.includes(String(kw).toLowerCase()));
+
+            return {
+                ok: hasAll,
+                msg: hasAll
+                    ? "Respuesta valida para nivel simulador (cumple patrones esperados)."
+                    : "Faltan elementos esperados en tu solucion (palabras clave requeridas)."
+            };
+        }
+
+        const ok = answer === q.answer;
+        return {
+            ok,
+            msg: ok ? "Opcion correcta." : "Opcion incorrecta."
+        };
+    }
+
+    function finalizeModule(auto = false) {
+        if (state.submitted) return;
+        state.submitted = true;
+
+        clearInterval(state.timer.intervalId);
+        pauseBtn.disabled = true;
+        resumeBtn.disabled = true;
+
+        let correct = 0;
+        feedbackList.innerHTML = "";
+
+        state.questions.forEach((q, idx) => {
+            const res = evaluateQuestion(q, state.answers[idx]);
+            if (res.ok) correct += 1;
+
+            const div = document.createElement("div");
+            div.className = "feedback-item " + (res.ok ? "ok" : "bad");
+            div.innerHTML = ""
+                + "<strong>Pregunta " + (idx + 1) + ": " + (res.ok ? "Correcto" : "Incorrecto") + "</strong>"
+                + "<p>" + res.msg + "</p>"
+                + "<p class='small'><strong>Explicacion:</strong> " + q.explanation + "</p>";
+
+            feedbackList.appendChild(div);
+        });
+
+        const total = state.questions.length;
+        const pct = Math.round((correct / total) * 100);
+        const usedSeconds = state.timer.totalSeconds - state.timer.remainingSeconds;
+
+        scoreLine.textContent = "Puntaje obtenido: " + correct + "/" + total + " (" + pct + "%)." + (auto ? " Envio automatico por tiempo agotado." : "");
+        timeLine.textContent = "Tiempo usado vs total: " + formatTime(usedSeconds) + " / " + formatTime(state.timer.totalSeconds) + ".";
+
+        resultSection.classList.remove("hidden");
+        resultSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    startBtn.addEventListener("click", () => {
+        const moduleId = Number(moduleSelect.value);
+        startModule(moduleId);
+    });
+
+    prevBtn.addEventListener("click", () => {
+        state.currentIndex = Math.max(0, state.currentIndex - 1);
+        renderQuestion();
+    });
+
+    nextBtn.addEventListener("click", () => {
+        state.currentIndex = Math.min(state.questions.length - 1, state.currentIndex + 1);
+        renderQuestion();
+    });
+
+    pauseBtn.addEventListener("click", pauseTimer);
+    resumeBtn.addEventListener("click", resumeTimer);
+    finishBtn.addEventListener("click", () => finalizeModule(false));
+    hintBtn.addEventListener("click", toggleHint);
+    explainBtn.addEventListener("click", explainCurrentQuestion);
+    helpLevelSelect.addEventListener("change", () => {
+        if (state.module && state.questions.length) {
+            renderQuestion();
+        } else {
+            updateSidebarForQuestion();
+        }
+    });
+
+    document.addEventListener("keydown", (event) => {
+        const tag = document.activeElement?.tagName || "";
+        if (tag === "TEXTAREA" || tag === "INPUT") return;
+
+        if (event.key === "ArrowLeft" && !prevBtn.disabled) {
+            prevBtn.click();
+        }
+        if (event.key === "ArrowRight" && !nextBtn.disabled) {
+            nextBtn.click();
+        }
+        if (event.key.toLowerCase() === "h") {
+            hintBtn.click();
+        }
+        if (event.key.toLowerCase() === "e") {
+            explainBtn.click();
+        }
+    });
+
+    // Recalculo por timestamp para evitar drift por pestaña inactiva.
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible" && !state.timer.paused && !state.submitted) {
+            tick();
+        }
+    });
+
+    buildModulesView();
+    updateSidebarForQuestion();
+})();
+
