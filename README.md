@@ -19,7 +19,7 @@ Está diseñado para que el estudiante no solo prepare respuestas correctas, sin
 | 1 | Fundamentos Desarrollo Web | Código | 8 | 19 min |
 | 2 | Programación con JavaScript | Selección Múltiple | 2 | 15 min |
 | 3 | Programación Avanzada JavaScript | Mixto | 15 | 20 min |
-| 4 | Fundamentos Bases de Datos Relacionales | Selección Múltiple | 14 | 24 min |
+| 4 | Fundamentos Bases de Datos Relacionales | Mixto (SQL) | 14+ | 24 min |
 | 5 | Desarrollo de Apps Web Node Express | Selección Múltiple | 10 | 13 min |
 | 6 | Acceso a Datos en Apps Node | Selección Múltiple | 12 | 15 min |
 | 7 | API Backend Node Express | Selección Múltiple | 10 | 13 min |
@@ -56,6 +56,8 @@ Está diseñado para que el estudiante no solo prepare respuestas correctas, sin
 - Campo de texto editable para escribir la solución completa.
 - Evaluación automática por palabras clave esperadas según enunciado.
 - La respuesta se guarda automáticamente al navegar entre preguntas.
+- En SQL: ejercicios prácticos de SELECT, INSERT, UPDATE, DELETE con validación de Keywords.
+- En HTML/CSS: retos aleatorios de componentes responsive.
 
 ### Guía pedagógica (barra lateral)
 
@@ -138,4 +140,3 @@ Ejercicio_Examen_Certificacion/
 ## Tipo de aplicación
 
 **Sitio estático**. No requiere conexión a internet, servidor, ni proceso de instalación. Solo es necesario abrir el archivo HTML en cualquier navegador moderno actualizado. Todo el procesamiento ocurre en el lado del cliente.
-# Ejercicio_Examen_Certificacion
