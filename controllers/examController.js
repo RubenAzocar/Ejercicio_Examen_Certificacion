@@ -766,7 +766,10 @@
                     "Ctrl-Space": "autocomplete",
                     "Tab": "emmetExpandAbbreviation",
                     "Enter": (cm) => {
-                        if (cm.execCommand("emmetExpandAbbreviation") === CodeMirror.Pass) {
+                        // Intentar expandir abreviación Emmet
+                        const result = cm.execCommand("emmetExpandAbbreviation");
+                        // Si el comando no existe o no pudo expandir, pasar al siguiente manejador (nueva línea)
+                        if (result === CodeMirror.Pass || result === undefined) {
                             return CodeMirror.Pass;
                         }
                     }
