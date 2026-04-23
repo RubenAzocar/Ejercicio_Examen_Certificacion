@@ -1,6 +1,6 @@
 # Simulador de Certificación Full Stack JavaScript Junior
 
-> **Sitio estático** — No requiere servidor, base de datos ni proceso de instalación. Funciona directamente en el navegador abriendo el archivo `simulador_certificacion_fullstack_2026.html`.
+> **Sitio estático** — No requiere servidor, base de datos ni proceso de instalación. Funciona directamente en el navegador abriendo el archivo `index.html`.
 
 ---
 
