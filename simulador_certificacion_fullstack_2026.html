@@ -1,145 +1,154 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simulador Certificacion Full Stack JavaScript Junior</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Certificación Full Stack JavaScript Junior 2026</title>
+    
+    <!-- Capas de Seguridad (Cybersecurity Hardening) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; frame-ancestors 'none';">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.css" crossorigin="anonymous">
+    
+    <!-- Estilo Local -->
     <link rel="stylesheet" href="views/styles.css">
 </head>
 <body>
-  <div class="wrap">
-    <section class="hero">
-      <h1>Desarrollo Full Stack JavaScript – 119 min Total</h1>
-      <p class="subtitle">Certificacion 2026 | Detalle Modulos, tipo de pregunta y tiempos.</p>
-    </section>
+    <div class="wrap">
+        <header class="hero">
+            <h1>Simulador Full Stack JavaScript Junior</h1>
+            <p class="subtitle">Certificación 2026 | Entorno de Práctica Avanzado</p>
+        </header>
 
-    <div class="layout">
-      <main class="main-column">
-    <section class="table-card">
-      <h2>Tabla de modulos</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Nombre del modulo</th>
-            <th>Tipo de preguntas</th>
-            <th>Cantidad preguntas</th>
-            <th>Tiempo</th>
-          </tr>
-        </thead>
-        <tbody id="modulesTableBody"></tbody>
-      </table>
+        <div class="layout">
+            <main class="main-column">
+                <!-- Pantalla de Configuración -->
+                <section id="setupSection" class="table-card">
+                    <h2>Módulos de Certificación</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Módulo</th>
+                                <th>Tipo</th>
+                                <th>Items</th>
+                                <th>Tiempo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modulesTableBody"></tbody>
+                    </table>
 
-      <div class="controls">
-        <label for="moduleSelect">Selector de modulo:</label>
-        <select id="moduleSelect"></select>
-        <button id="startBtn" class="btn-primary">Iniciar modulo</button>
-      </div>
-      <p class="small">Sugerencia: al iniciar un modulo, se carga su temporizador independiente y no comparte respuestas con otros modulos.</p>
-    </section>
+                    <div class="controls">
+                        <label for="moduleSelect">Seleccionar Desafío:</label>
+                        <select id="moduleSelect"></select>
+                        <button id="startBtn" class="btn-primary">Comenzar Simulación</button>
+                    </div>
+                </section>
 
-    <section id="examSection" class="exam-card hidden">
-      <div class="status-row">
-        <div>
-          <span class="pill" id="moduleBadge"></span>
-          <span class="pill" id="progressBadge"></span>
+                <!-- Pantalla de Examen -->
+                <section id="examSection" class="exam-card hidden">
+                    <div class="status-row">
+                        <div>
+                            <span class="pill" id="moduleBadge"></span>
+                            <span class="pill" id="progressBadge"></span>
+                        </div>
+                        <div class="timer" id="timerLabel">00:00</div>
+                    </div>
+
+                    <div class="controls-bar" style="display: flex; gap: 10px; margin-bottom: 25px;">
+                        <button id="pauseBtn" class="btn-warning">Pausar</button>
+                        <button id="resumeBtn" class="btn-primary" disabled>Reanudar</button>
+                        <button id="finishBtn" class="btn-danger">Finalizar</button>
+                    </div>
+
+                    <article class="question-container">
+                        <p id="questionType" class="sidebar-note" style="text-transform: uppercase; font-weight: bold; letter-spacing: 1px;"></p>
+                        <h2 id="questionTitle" class="question-title"></h2>
+                        
+                        <div class="guide-row" style="display: flex; gap: 10px; margin-bottom: 20px;">
+                            <button id="hintBtn" class="btn">Pista</button>
+                            <button id="explainBtn" class="btn">Explicar</button>
+                            <button id="solutionBtn" class="btn">Ver Solución</button>
+                        </div>
+
+                        <div id="hintText" class="hint-box hidden"></div>
+                        <div id="solutionBox" class="solution-box hidden"></div>
+                        
+                        <div id="questionBody"></div>
+                        
+                        <div id="codeCoachBox" class="coach-box hidden"></div>
+                        <div id="lineByLineBox" class="line-guide hidden"></div>
+                        <div id="checklistBox" class="checklist hidden"></div>
+                    </article>
+
+                    <nav class="nav-row" style="display: flex; justify-content: space-between; margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px;">
+                        <button id="prevBtn" class="btn">← Anterior</button>
+                        <button id="nextBtn" class="btn-primary">Siguiente →</button>
+                    </nav>
+                </section>
+
+                <!-- Pantalla de Resultados -->
+                <section id="resultSection" class="result-card hidden">
+                    <h2>Evaluación Finalizada</h2>
+                    <div id="scoreDisplay" style="margin: 20px 0; font-size: 1.2rem;">
+                        <p id="scoreLine"></p>
+                        <p id="timeLine"></p>
+                    </div>
+                    <div id="feedbackList"></div>
+                    <button onclick="location.reload()" class="btn-primary" style="margin-top: 20px;">Volver al Inicio</button>
+                </section>
+            </main>
+
+            <!-- Barra Lateral Pedagógica -->
+            <aside class="sidebar">
+                <div class="sidebar-block">
+                    <strong id="sideModule">Módulo: General</strong>
+                    <p id="sideQuestionType" class="sidebar-note">Inicia para ver detalles.</p>
+                </div>
+
+                <div class="sidebar-block">
+                    <strong>Paso a paso sugerido</strong>
+                    <ol id="sideSteps" class="sidebar-steps"></ol>
+                </div>
+
+                <div class="sidebar-block">
+                    <strong>Concepto Clave</strong>
+                    <p id="sideConcept" class="sidebar-note"></p>
+                </div>
+
+                <div class="sidebar-block">
+                    <strong>Nivel de Ayuda</strong>
+                    <select id="helpLevelSelect">
+                        <option value="basico">Básico</option>
+                        <option value="intermedio" selected>Intermedio</option>
+                        <option value="guiado">Guiado</option>
+                    </select>
+                </div>
+
+                <div class="sidebar-block">
+                    <strong>Métricas</strong>
+                    <p id="sideMetrics" class="sidebar-note">Esperando inicio...</p>
+                </div>
+            </aside>
         </div>
-        <div>
-          <span class="timer" id="timerLabel">00:00</span>
-        </div>
-      </div>
-
-      <div class="controls" style="margin-top:0;">
-        <button id="pauseBtn" class="btn-warning">Pausar</button>
-        <button id="resumeBtn" class="btn-primary" disabled>Reanudar</button>
-        <button id="finishBtn">Finalizar modulo</button>
-      </div>
-
-      <article class="question-card">
-        <p id="questionType" class="question-type"></p>
-        <p id="questionTitle" class="question-title"></p>
-        <div class="guide-row">
-          <button id="hintBtn" type="button">Mostrar pista</button>
-          <button id="explainBtn" type="button">Explicar pregunta</button>
-        </div>
-        <div id="hintText" class="hint-box hidden"></div>
-        <div id="questionBody"></div>
-        <div id="codeCoachBox" class="coach-box hidden"></div>
-        <div id="lineByLineBox" class="line-guide hidden"></div>
-        <div id="checklistBox" class="checklist hidden"></div>
-      </article>
-
-      <div class="nav-row">
-        <button id="prevBtn">Anterior pregunta</button>
-        <button id="nextBtn" class="btn-primary">Siguiente pregunta</button>
-      </div>
-    </section>
-
-    <section id="resultSection" class="result-card hidden">
-      <h2>Resultado del modulo</h2>
-      <p id="scoreLine"></p>
-      <p id="timeLine"></p>
-      <div id="feedbackList"></div>
-    </section>
-      </main>
-
-      <aside class="sidebar">
-        <h3>Guia Pedagogica</h3>
-        <p class="sidebar-note">Refuerzo paso a paso para resolver codigo y responder seleccion multiple con criterio tecnico.</p>
-
-        <div class="sidebar-block">
-          <strong id="sideModule">Modulo: General</strong>
-          <p id="sideQuestionType" class="sidebar-note">Selecciona un modulo para comenzar.</p>
-        </div>
-
-        <div class="sidebar-block">
-          <strong>Paso a paso sugerido</strong>
-          <ol id="sideSteps" class="sidebar-steps"></ol>
-        </div>
-
-        <div class="sidebar-block">
-          <strong>Concepto clave</strong>
-          <p id="sideConcept" class="sidebar-note">Se mostrara una explicacion breve y practica del tema actual.</p>
-        </div>
-
-        <div class="sidebar-block">
-          <strong>Explicacion ad hoc</strong>
-          <p id="sideAdhoc" class="sidebar-note">Cuando respondas, aqui veras retroalimentacion contextual para afianzar conceptos.</p>
-        </div>
-
-        <div class="sidebar-block">
-          <strong>Guia linea a linea</strong>
-          <div id="sideLineByLine" class="line-guide">
-            <p class="sidebar-note">En preguntas de codigo veras una plantilla detallada por lineas para interiorizar estructura y sintaxis.</p>
-          </div>
-        </div>
-
-        <div class="sidebar-block">
-          <strong>Nivel de ayuda</strong>
-          <select id="helpLevelSelect" aria-label="Nivel de ayuda">
-            <option value="basico">Basico</option>
-            <option value="intermedio" selected>Intermedio</option>
-            <option value="guiado">Guiado</option>
-          </select>
-          <p class="sidebar-note" style="margin-top:6px;">Basico: menos pistas | Guiado: mas detalle paso a paso.</p>
-        </div>
-
-        <div class="sidebar-block">
-          <strong>Metricas de aprendizaje</strong>
-          <p id="sideMetrics" class="sidebar-note">Respondidas: 0 | Aciertos iniciales: 0</p>
-        </div>
-
-        <div class="sidebar-block">
-          <strong>Atajos rapidos</strong>
-          <p class="sidebar-note">H: pista | E: explicacion | Flechas: navegar preguntas.</p>
-        </div>
-      </aside>
     </div>
-  </div>
 
+    <!-- Scripts Externos -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/sql/sql.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/closebrackets.min.js" crossorigin="anonymous"></script>
+
+    <!-- Lógica de la Aplicación -->
     <script src="models/examModel.js"></script>
-  <script src="views/examView.js"></script>
-  <script src="controllers/examController.js"></script>
+    <script src="views/examView.js"></script>
+    <script src="controllers/examController.js"></script>
 </body>
 </html>
-

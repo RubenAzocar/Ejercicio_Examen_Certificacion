@@ -20,7 +20,9 @@
     const finishBtn = document.getElementById("finishBtn");
     const hintBtn = document.getElementById("hintBtn");
     const explainBtn = document.getElementById("explainBtn");
+    const solutionBtn = document.getElementById("solutionBtn");
     const hintText = document.getElementById("hintText");
+    const solutionBox = document.getElementById("solutionBox");
     const checklistBox = document.getElementById("checklistBox");
     const codeCoachBox = document.getElementById("codeCoachBox");
     const lineByLineBox = document.getElementById("lineByLineBox");
@@ -56,7 +58,9 @@
         finishBtn,
         hintBtn,
         explainBtn,
+        solutionBtn,
         hintText,
+        solutionBox,
         checklistBox,
         codeCoachBox,
         lineByLineBox,

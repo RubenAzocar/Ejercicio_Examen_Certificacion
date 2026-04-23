@@ -33,8 +33,19 @@
         sideAdhoc,
         sideLineByLine,
         helpLevelSelect,
-        sideMetrics
+        sideMetrics,
+        solutionBtn,
+        solutionBox
     } = globalThis.AppView;
+
+    let codeEditor = null;
+
+    function destroyEditor() {
+        if (codeEditor) {
+            codeEditor.toTextArea();
+            codeEditor = null;
+        }
+    }
 
     const MODULE_CONCEPTS = {
         1: "Domina estructura semantica HTML, estilos CSS base y logica JavaScript simple para construir interfaces limpias.",
@@ -437,6 +448,18 @@
                 hint: "Relaciona label e input con for/id y apila campos con flex en columna."
             },
             {
+                name: "contenedor centrado",
+                htmlKeywords: ["div", "h1", "Bienvenidos"],
+                cssKeywords: ["display", "flex", "justify-content", "align-items", "height"],
+                hint: "Usa flexbox con justify-content y align-items para centrar el h1 en el div."
+            },
+            {
+                name: "boton con tooltip",
+                htmlKeywords: ["button", "title", "enviar"],
+                cssKeywords: ["border-radius", "transition", "hover"],
+                hint: "Usa el atributo title para el tooltip y :hover en CSS para el cambio de color."
+            },
+            {
                 name: "seccion hero",
                 htmlKeywords: ["<section", "<h1", "<p", "<a"],
                 cssKeywords: ["background", "padding", "text-align"],
@@ -488,6 +511,14 @@
             {
                 task: "Crea un UPDATE que cambie el precio de un producto especifico (por id). Asegura que solo modifique ese producto.",
                 expectedKeywords: ["UPDATE", "SET", "WHERE"]
+            },
+            {
+                task: "Escribe una consulta SQL que devuelva el nombre del producto y el total de unidades vendidas, filtrando los que superen 500 unidades. Usa un CTE (WITH).",
+                expectedKeywords: ["WITH", "AS", "SELECT", "SUM", "GROUP BY", "HAVING"]
+            },
+            {
+                task: "Elimina todos los registros de la tabla Pedidos realizados antes del 1 de enero de 2023.",
+                expectedKeywords: ["DELETE", "FROM", "WHERE", "<", "2023-01-01"]
             }
         ];
 
@@ -506,6 +537,31 @@
                 "Si usas JOIN, verifica que las claves foráneas sean correctas.",
                 "ORDER BY y LIMIT si el enunciado lo requiere."
             ]
+        };
+    }
+
+    function generateRandomJsLogicChallenge() {
+        const scenarios = [
+            {
+                task: "Escribe una funcion que reciba un array de ventas y retorne el total acumulado usando reduce.",
+                expectedKeywords: ["function", "reduce", "acc", "return"]
+            },
+            {
+                task: "Crea una funcion async que espere un segundo (setTimeout con Promise) y luego retorne 'Listo'.",
+                expectedKeywords: ["async", "Promise", "setTimeout", "await"]
+            },
+            {
+                task: "Implementa una funcion que filtre un array de usuarios por una propiedad 'activo: true'.",
+                expectedKeywords: ["filter", "activo", "true", "return"]
+            }
+        ];
+        const s = scenarios[Math.floor(Math.random() * scenarios.length)];
+        return {
+            type: "code",
+            prompt: s.task,
+            expectedKeywords: s.expectedKeywords,
+            explanation: "Se evalua uso de metodos de array, asincronia y logica basica de JavaScript.",
+            hint: "Usa metodos modernos como filter, map o reduce para un codigo mas limpio."
         };
     }
 
@@ -530,8 +586,11 @@
         if (moduleId === 1) {
             generated.push(generateRandomHtmlCssChallenge(), generateRandomHtmlCssChallenge(), generateRandomHtmlCssChallenge());
         }
+        if (moduleId === 2) {
+            generated.push(generateRandomJsLogicChallenge(), generateRandomJsLogicChallenge());
+        }
         if (moduleId === 3) {
-            generated.push(generateRandomHtmlCssChallenge(), generateRandomHtmlCssChallenge());
+            generated.push(generateRandomHtmlCssChallenge(), generateRandomJsLogicChallenge(), generateRandomJsLogicChallenge());
         }
         if (moduleId === 4) {
             generated.push(generateRandomSqlChallenge(), generateRandomSqlChallenge(), generateRandomSqlChallenge());
@@ -605,6 +664,28 @@
         resumeBtn.disabled = true;
     }
 
+    // Inicialización de eventos globales (solo una vez)
+    solutionBtn.addEventListener("click", toggleSolution);
+    document.addEventListener("keydown", handleGlobalKeys);
+
+    function handleGlobalKeys(e) {
+        if (state.submitted) return;
+        
+        // Evitar disparar atajos si el usuario está escribiendo en el editor
+        if (codeEditor && codeEditor.hasFocus()) return;
+
+        if (e.key.toLowerCase() === "h") toggleHint();
+        if (e.key.toLowerCase() === "s") toggleSolution();
+        if (e.key === "ArrowRight" && !nextBtn.disabled) {
+            state.currentIndex++;
+            renderQuestion();
+        }
+        if (e.key === "ArrowLeft" && !prevBtn.disabled) {
+            state.currentIndex--;
+            renderQuestion();
+        }
+    }
+
     function tick() {
         if (state.timer.paused || state.submitted) return;
 
@@ -633,6 +714,9 @@
         hintText.classList.add("hidden");
         hintText.textContent = q.hint || q.explanation || "Piensa en los conceptos base del modulo y responde paso a paso.";
         hintBtn.textContent = "Mostrar pista";
+        solutionBox.classList.add("hidden");
+        solutionBox.innerHTML = "";
+        solutionBtn.textContent = "Ver solución";
 
         questionBody.innerHTML = "";
         checklistBox.innerHTML = "";
@@ -661,18 +745,38 @@
             checklistBox.appendChild(ul);
             checklistBox.classList.remove("hidden");
 
+            destroyEditor(); // Limpiar instancia anterior
             const area = document.createElement("textarea");
-            area.placeholder = "Escribe aqui tu solucion...";
-            area.value = state.answers[state.currentIndex] || "";
-            renderCodeCoach(area.value, q);
-            updateProgressiveGuides(area.value, q);
-            area.addEventListener("input", (e) => {
-                state.answers[state.currentIndex] = e.target.value;
-                renderCodeCoach(e.target.value, q);
-                updateProgressiveGuides(e.target.value, q);
+            area.id = "code-editor-area";
+            questionBody.appendChild(area);
+
+            const promptText = (q.prompt || "").toLowerCase();
+            let mode = "javascript";
+            if (promptText.includes("sql") || promptText.includes("consulta")) mode = "text/x-sql";
+            if (promptText.includes("html") || promptText.includes("css")) mode = "htmlmixed";
+
+            codeEditor = CodeMirror.fromTextArea(area, {
+                mode: mode,
+                theme: "dracula",
+                lineNumbers: true,
+                autoCloseBrackets: true,
+                matchBrackets: true,
+                tabSize: 2,
+                extraKeys: { "Ctrl-Space": "autocomplete" }
+            });
+
+            codeEditor.setValue(state.answers[state.currentIndex] || "");
+
+            renderCodeCoach(codeEditor.getValue(), q);
+            updateProgressiveGuides(codeEditor.getValue(), q);
+
+            codeEditor.on("change", (instance) => {
+                const val = instance.getValue();
+                state.answers[state.currentIndex] = val;
+                renderCodeCoach(val, q);
+                updateProgressiveGuides(val, q);
                 updateLearningMetrics();
             });
-            questionBody.appendChild(area);
         } else {
             const wrap = document.createElement("div");
             wrap.className = "options";
@@ -719,6 +823,44 @@
     function toggleHint() {
         hintText.classList.toggle("hidden");
         hintBtn.textContent = hintText.classList.contains("hidden") ? "Mostrar pista" : "Ocultar pista";
+        if (!hintText.classList.contains("hidden")) solutionBox.classList.add("hidden");
+    }
+
+    function toggleSolution() {
+        const q = state.questions[state.currentIndex];
+        if (!q) return;
+
+        if (!solutionBox.classList.contains("hidden")) {
+            solutionBox.classList.add("hidden");
+            solutionBtn.textContent = "Ver solución";
+            return;
+        }
+
+        solutionBox.innerHTML = "";
+        const title = document.createElement("h4");
+        title.textContent = "Solución Sugerida";
+        
+        const explanation = document.createElement("p");
+        explanation.innerHTML = "<strong>Explicación:</strong> " + (q.explanation || "No hay explicación disponible.");
+
+        solutionBox.appendChild(title);
+
+        if (q.type === "code") {
+            const codeBlock = document.createElement("code");
+            codeBlock.className = "solution-code";
+            // Si no hay solutionCode, usamos keywords como referencia o un mensaje
+            codeBlock.textContent = q.solutionCode || "/* Ejemplo de estructura esperada */\n" + (q.expectedKeywords ? q.expectedKeywords.join(" ") : "// Revisa los conceptos del módulo");
+            solutionBox.appendChild(codeBlock);
+        } else {
+            const correctOpt = document.createElement("p");
+            correctOpt.innerHTML = "<strong>Respuesta correcta:</strong> " + q.options[q.answer];
+            solutionBox.appendChild(correctOpt);
+        }
+
+        solutionBox.appendChild(explanation);
+        solutionBox.classList.remove("hidden");
+        hintText.classList.add("hidden");
+        solutionBtn.textContent = "Ocultar solución";
     }
 
     function explainCurrentQuestion() {

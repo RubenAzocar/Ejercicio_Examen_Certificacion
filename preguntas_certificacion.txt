@@ -1,0 +1,677 @@
+TECNICAS DE RESPONSIVIDAD
+
+1.- ¿cual de las siguientes tecnicas es fundamental para adaptar el contenido de un sitio web a diferentes tamaños de pantalla?
+a.- aplicar unicamente etiquetas<meta> sin ajustes en css
+b.- uso exclusivo de imagenes PNG
+c.- utilizar posiciones: fixed en todos los elementos
+e.- uso de @media queries para ajustar estilos segun el viewport
+
+UNIDADES FLEXIBLES
+
+2.- ¿cual de las siguientes unudades de medida es mas adecuada para establecer el tamaño de fuente en diseños responsivos?
+a.- porcentaje (%)
+b.- centimetros (cm)
+c.- rem
+d.- em
+e.- pixeles (px)
+
+MEDIA QUERIES
+
+3.- ¿cual es la sintaxis correcta para aplicar estilos a dispositivos con un ancho máximo de 768px?
+a.- @media only screen and (max-width: 768) {...}
+b.- @media (min-width: 768px) {...}
+c.- @media sccreen and (width <= 768px) {...}
+d.- @media (max-device-width: 768px) {...}
+e.- @media only screen and (min-device-width: 768px) {...}
+
+GIT
+
+4.- ¿Para que sirve principalmente Git?
+a.- Para controlar versiones del codigo fuente
+b.- para automatizar pruebas de software
+c.- para compilar codigos en multiples lenguajes
+d.- para diseñar interfaces graficas de usuario
+e.- para gestionar bases de datos relacionales
+
+AGREGAR CAMBIOS
+
+5.- ¿que comando se utiliza para agregar cambios al area de preparacion (staging area) en git?
+a.- git merge
+b.- git status
+c.- git add
+d.- git push
+e.- git commit -m "mensaje"
+
+
+6.- ¿cual es la principal diferencia entre "git rebase" y "git merge"?
+a.- rebase reescribe el historial para mostrarr una lineal lineal, mientras que merge conserva el historial de ramas
+b.- merge reescribe el historial completo del repositorio
+c.- rebase fusiona ramas sin crear commits
+d.- rebase crea una copia del repositorio y merge no
+e.- merge elimina automaticamente las ramas fusionadas
+
+7.- Utilizando HTML, cree un contenedor (div) que incluya un encabezado {h1}
+ con el texto "Bienvenidos". El contenido debe estar centrado tanto vertical 
+ como horizontalmente, con fondo color celeste {#87CEEB}y texto en color blanco.
+
+8.- Utilizando HTML y estilos, cree un boton con la etiquet "enviar" que cumpla
+las siguientes condiciones:
+- cambia color al pasar el cursor sobre el
+- presenta bordes redondeados
+- ejecuta la funcion handleButton al hacer click (no es necesario defnir funcion)
+- al posicionar el cursor sobre boton, debe mostrarse un texto emergente
+  (tooltip) con el mensaje "clickear".
+
+JAVA SCRIPT
+
+1.- para resolver este ejercicio debera utilizar JavaScript
+tu equipo esta desarrollandoun sistema para registrar temperaturas diarias y calcular estadisticas, pero el codigo esta incompleto.
+tu tarea es completar el calculo de la temperatura maxima, minima y el promedio semanal.
+escribir el codigo a partir del comentario indicado dentro del bucle, no borres el comentario ni modifiques el resto del codigo: 
+function analizarTemperaturas{temperaturas}{
+  if {temperaturas.length === 0) {
+    return {
+      promedio: null,
+      maxima: null,
+      minima: null
+    };
+  }
+
+  let suma = 0;
+  let minima = temperaturas[0];
+  let maxima = temperaturas[0];
+
+  for {let temp of temperaturas} {
+    suma += temp;
+   //escribe tu codigo aqui//
+
+  return {
+    promedio,
+    maxima,
+    minima,
+  };
+ }
+
+2.- Para resolver este ejercicio, deberas utilizar JavaScript
+Tu equipo esta desarrollando una funcion que recibe un string y devuleve las palabras que tengan alguna coincidencia con el string recibido, pero el mismo esta incompleto.
+tu tarea es completar el codigo a partir del comentario indicado dentro de la funcion. Considera que la funcion no tiene que diferenciar entre mayusculas y minusculas.
+No borres el comentario ni modifiques el resto del codigo.
+
+function filtrarPalabras{palabra} {
+  const palabrasTotal = await getWords();
+  if (palabra.length < 3) {
+     return palabrasTotal;
+}
+  // escribe aqui tu codigo //
+
+CONCEPTOS BASICOS DE OOP (POO)
+
+1.- En JavaScript ¿como se define una clase utilizando la sintaxis moderna ES6?
+a.-let MiClase = class {}
+b.- define Class MiClase {}
+c.- class MiClase {}
+d.- function MiClase{} {}
+e.- const MiClase = new Class{} {}
+
+2.- ¿Que palabra clave en Javacript se usa para permitir que una clase herede de otra?
+a.- implements
+b.- extends
+c.- protoptype
+d.- superclass
+e.- inherits
+
+3.- ¿que sucede cuando una subclase en JavaScript redefine una propiedad del constructor de su clase padre?
+a.- La nueva propiedad reemplaza la de la clase padre en la instancia
+b.- la propiedad queda como undefined
+c.- Se genera un error si se sobreescribe la propiedad
+d.- Ambas pripiedades coexisten con distintos valores
+e.- la propiedad original se mantiene sin cambios
+
+ESPECIFICACION ES6+
+4.- ¿Cual de las siguientes palabras clave se introdujo en ES6 para declarar variables con ambito de bloque?
+a.- var
+b.- const
+c.- let
+d.- mutable
+e.- static
+
+5.- ¿Cual es la principal ventaja de usar desestructuracion de objetos en JavaScript ES6?
+a.-Mejora el rendimiento de ejecucion del codigo
+b.- No tiene ninguna ventaja sobre la notación tradicional de puntos (obj.propiedad)
+c.- Permite modificar las propiedades del objeto sin afectar la variable original
+d.- convierte los objetos en arrays automaticamente.
+e.- Perrmite extraer valores de objetos de forma mas concisa.
+
+6.- ¿Cual es la salida del siguiente codigo en JavaScript ES6+?
+  const obj = {
+  a: 1,
+  b: 2,
+  c: {
+    d: 3
+  }
+ };
+
+ const { a, ...rest } = obj;
+ rest.c.d = 42;
+
+ console.log(obj.c.d);
+a.- 42
+b.- TypeError: Cannot asign to read only property 'd'
+c.- undefined
+d.- ReferenceError: rest is not defined
+e.- 3
+
+EFECTOS Y MANIPULACION DEL DOM
+
+7.- Cuando se usa una funcion tradicional como manejador de eventos en un boton ¿a que hace refferencia this dentro del manejador?
+a.- Al boton que disparó el evento
+b.- Al evento en si mismo
+c.- al objeto window
+d.- a la funcion manejadora
+e.- a null
+
+8.- ¿ Que efecto tiene el metodo stopPropagation{} en un manejador de eventos en el DOM?
+a.- reinicia la propagacion desde el elemento raiz
+b.- cancela el evento por completo, incluyendo acciones del navegador
+c.- impide que elevento se propague a elementos padres
+d.- detiene la ejecucion del callback
+e.- evita que el evento se dispare
+
+9.- Cuando se utiliza flecha dentro de un setTimeout{} en un manejador de eventos, ¿a que hace referencia this?
+a.- a window
+b.- al objeto event
+c.- a null
+d.- al boton que disparó el evento
+e.- añ setTimeout
+
+JAVASCRIPT ASINCRONICO
+
+10.- ¿Que palabra clave se usa en  JavaScript para definir una funcion asincronica?
+a.- fetch
+b.- await
+c.- setTimeout
+d.- promise
+e.- async
+
+11.- ¿Que funcion cumple el metodo .finally{} en una cadena de promesas?
+a.- se ejecuta  solo si la promesa fue resuelta con exito.
+b.- Evitta que se propague cualquier error posterior
+c.- Se ejecuta siempre, independientemente del resultado de la promesa
+d.- Finaliza la ejecucion de la promesa de forma forazada.
+e.- Captura errores que no se manejaron con .catch().
+
+12.- ¿Que efecto tiene el uso de await dentro de una funcion async sobre el orden de ejecucion del codigo?
+a.- Hace que el codigo posterior al await se ejecute inmediatamente
+b.- Bloquea toda la ejecucion del programa hasta que se resuelva la promesa
+c.- Permite que otras tareas del event loop se ejecuten antes de continuar
+d.- Ignora la promesa y continua con la ejecucuin sin esperar
+e.- Convierte el codigo en  sincronico automaticamente
+
+13.- ¿Cual es la diferencia entre el async/await y .then{} en promesas?
+a.- async/await permite escribir codigo asincrono de manera  mas legible y estructurada en comparacion con .then{}
+b.- .then{} solo se usa con setTimeout, mientras que async/await es para fetch
+c.- async/await no es compatible con promesas, solo con setinterval
+d.- .then{} bloquea la ejecucion del codigo hasta que la promesa se resuelva, mientras que async/await no
+e.- async/await no permite manejar errores, mientras que .then() si
+
+14.- ¿Cual es la diferencia entre Promise.allSettled{} y promise.all{}?
+a.- promise.all{} devuelve una promesaque siempre se resuelve, incluso su una de sus promesas falla
+b.- promise.allSettled{} espera a que todas las promesas terminen (resueltas o rechazadas), mientras que promise.all{} falla si una promesa se rechaza
+c.- promise.all{} y promise.allSettled{} funcionan exactamente igual
+d.- promise.allSettled{} se usa exclusivamente con async/await, mientras que promise.all{} son con .then{}
+e.- promise.all{} espera a que todas las promesas sean resueltas o rechazadas, mientras que promise.allSettled{}solo espera resoluciones.
+
+15.- ¿Que ocurre si se utiliza try...catch en una funcion async, pero el rechazo de la promesa no es manejado dentro del bloque try?
+a.- el codigo lanza una excepcion en tiempo de compilacion
+b.- el error se propaga y puede capturarse con .catch{}
+c.- el try...catch convierte el error en una advertencia
+d.- la funcion async atrapa automaticamente todos los errores
+e.- eñ rechazo se ignora y la funcion retorna undefined
+
+SQL
+
+1.- ¿Como eliminarias un registro?
+a.- DROP clientes WHERE id_cliente = 5;
+b.- DELETE FROM clientes;
+c.- REMOVE FROM clientes WHERE id_cliente = 5;
+d.- DELETE FROM clientes WHERE id_cliente = 5;
+e.- DELETE clientes WHERE id_cliente = 5;
+
+2.- ¿Como eliminarias todos los registros realizados antes del año 2023 en la tbla Pedidos?
+a.- DROP pedidos WHERE fecha < '2023-01-01';
+b.- DELETE FROM Pedidos WHERE fecha <'2023-01-01';
+c.- DELETE Pedidos WHERE fecha < '2023-01-01';
+d.- DELETE FROM Pedidos; WHERE fecha < '2023-01-01';
+e.- REMOVE FROM Pedidos WHERE fecha < '2023-01-01';
+
+3.- ¿Cual de las siguientes consultas devuelve, para cada cliente, la cantidad total de pedidos y cuantos de esos fueron entregados en 2024 {estado = 'entregado' y fecha dentro de 2024}?
+(las tablas son: Pedidos{id_pedido, id_cliente, fecha, estado})
+a.- SELECT id_cliente
+    COUNT() AS total_pedidos,
+    CASE WHEN estado = 'Entregado' AND YEAR(fecha) = 2024 THEN COUNT() ELSE 0
+    END AS entregados_2024
+    FROM Pedidos
+    GROUP BY id_cliente;
+b.- SELECT id_cliente,
+    COUNT(*) AS total_pedidos,
+    COUNT(CASE WHEN estado = 'Entregado' AND YEAR(fecha) = 2024 THEN 1 END)
+    AS entregados_2024
+    FROM Pedidos
+    GROUP BY id_cliente;
+c.- SELECT id_cliente,
+    COUNT(*) AS total_pedidos,
+    COUNT(CASE WHEN estado = 'Entregado' AND YEAR(fecha) = 2024 THEN 1 ELSE 0
+    END) AS entregados_2024
+    FROM Pedidos
+    GROUP BY id_cliente;
+d.- SELECT id_cliente,
+    COUNT(+) AS total_pedidos,
+    FILTER(WHERE estado = 'Entregado' AND YEAR(fecha) = 2024) AS 
+    entregados_2024
+    FROM Pedidos
+    GROUP BY id_cliente;
+e.- SELECT id_cliente,
+    count(*) AS total_pedidos,
+    SUM(CASE WHEN estado = 'Entregado' AND fecha BETWEEN '2024-01-01' AND 
+    '2024-12-31' WHEN 1 ELSE 0 END) AS entregados_2024
+    FROM Pedidos
+    GROUP BY id_cliente;
+
+4.- ¿Como cambiarias el tipo de dato de la columna telefono en la tabla Clientes a VARCHARD(20)?
+a.- ALTER TABLE clientes ,MODIFY telefono VARCHARD(20);
+b.- MODIFY TABLE clientes CHANGE COLUMN telefono VARCHARD(20);
+c.- EDIT TABLE clientes CHANGE COLUMN telefono VARCHARD(20);
+d.- UPDATE TABLE clientes ,MODIFY COLUMN telefono VARCHARD(20);
+e.- REDEFINE TABLE clientes ALTER COLUMN  telefono VARCHARD(20);
+
+5.- ¿Como cambiar el nombre de la tabla Empleados a Personal?
+a.-CHANGE TABLE Empleados TO Personal;
+b.- ALTER TABLE Empleados RENAME TO Personal;
+c.- UPDATE TABLE Empleados TO Personal;
+d.- MODIFY TABLE Empleados RENAME Personal;
+e.- RENAME Empleados AS Personal;
+
+CREAR UNA TABLA CON CLAVE PRIMARIA COMPUESTA
+6.- ¿Cual de las siguientes sentencias te permite colocar una restriccion para que el campo edad permita solo edades entre 18 y 65?
+a.- CHECK (edad >=18 AND edad <=65)
+b.- CONSTRAIN (edad >= 18 AND edad <=65)
+c.- CHECK edad BETWEEN 18 AND 65
+d.- CONSTRAIN edad BETWEEN 18 AND 65
+e.- CHECK CONSTRAIN edad BETWEEN 18 AND 65
+
+DEFINICION DE ENTIDAD
+
+7.- Estás modelando una base de datos para una clínica. Necesitas representar a cada paciente, con su nombre, DNI, fecha de nacimiento y domicilio. ¿Que elemento del modelo entidad-relación usarías para representarlo correctamente?
+a.-Una relación entre atributos que defina como se conectan los datos del paciente
+b.- Un conjunto de daos agrupados en una tabla secundaria
+c.- Una entidad, ya que cada paciente es un objeto con existencia propia y atributos identificables
+d.- Una propiedad del sistema que describe los datos clínicos
+e.- Un índice compuesto que garantiza la unicidad de los pacientes registrados
+
+ENTIDAD CON CLAVE FORÁNEA
+
+8.- ¿Como se representa una entidad con una clave foránea en un modelo entidad-relación?
+a.- Con una línea que conecta la entidad con otra entidad dinde la clave primaria de esta última se convierte en la clave foránea
+b.- Con una línea de relación y un rombo
+c.- Con un circulo que conecta las entidades
+d.- Con una línea que conecta la entidad con la tabla que contiene la clave foránea
+e.- Con una flecha apuntando hacia la entidad de origen
+
+CLAVE PRIMARIA
+
+9.- Estás modelando una base de datos para una empresa de logística. La entidad Camión deve poder ser identificada de forma única en el sistema, incluso si hay varios con la misma marca o modelo. ¿Qué elemento del modelo entidad-relación debes utilizar para garantizar esa unicidad?
+a.- Un conjunto de atributos compartidos con otras entidades como forma de identificación
+b.- Una clave derivada que se genere automáticamente a partir de otros atributos como marca y año
+c.- Una clave primaria en la entidad Camión, compuesta o simple, que identifique de forma unica a cada instancia
+d.- Una clave foránea desde la entidad Camión hacia la entidad Conductor
+e.- Una relación de tipo 1:1 entre Camión y otra entidad que actúe como identificador
+
+10.- estás diseñando una base de datos para una empresa de recursos humanos. En la entidad Empleado, necesitas almacenar el domicilio completo (calle, número, ciudad, y código postal), pero también quieres poder consultar cada uno de eses datos por separado. ¿Como deberías modelar esta información en el diagrama entidad-relación?
+a.- como un atributo de tipo JSON para mantener la estructura agrupada con atributos más simples como calle, número, ciudad y código postal.
+b.- Como atributo multivaluado, ya que contiene varios datos posibles para un mismo campo
+c.- Como un atributo dericado que se genera automáticamente a partir de la dirección ingresada
+d.- Como un atributo compuesto llamado domicilio, que se divide en atributos más simples como calle, número, ciudad y código postal
+e.- Como una clave foránea que conecta la entidad Empleado con una entidad Domicilio
+
+HERENCIA EN EL MODELO ER
+
+11.- En una aplicación bancaria, dos transacciones simúltaneas intentan leer y actualizar el mismo saldo de una cuenta. La primera transacción lee el saldom espera unos segundos y luego lo actualiza. La segunda transacción lee el mismo saldo antes de que la primera termine y también lo actualiza. Si ambas operaciones se ejecutan bajo el nivel de aislamiento READ COMMITED. ¿cuál de los siguientes problemas puede ocurrir y cómo se puede evitar?
+a.- No ocurre ningún problema; READ COMMITED garantiza consistencia total
+b.- Puede ocurrir una condición de carrera (race condition) y sobreescribe el valor actualizado por la otra transacción y perderse una transacción.
+c.- El motor aborta automáticamente una de las transacciones; no se requiere ajuste adicional.
+d.- Ocurre un phantom read que puede evitarse usando ROLLBACK automático al detectar camnios en la tabla.
+e.- Ambas transacciones quedan bloqueadas hasta que una finaliza; es un deadlock inevitable en READ COMMITED
+
+SQL
+
+12.- Con lenguaje SQL, completa la siguiente consulta para obtener todos los productos cuyo presio sea mayor a 100 y estado activo o precio menor a 50 y estado inactivo.
+Table disponible:
+productos:
+-id(INT)
+-nombre(VARCHAR)
+-estado(VARCHAR)
+-precio(INT)
+
+AGREGACION SQL
+
+13.- Escribe una consulta en SQL que devuelva los nombres de los 3 productos más vendidos (por cantidad total) ordenados de mayor a menor. Solo debe mostrarse el nombre del producto y la cantidad total vendida.
+Tablas disponibles
+products:
+-id (INT)
+-name(VARCHAR)
+-category(VARCHAR)
+
+order_items:
+
+-id(INT)
+-order_id(INT)
+-product_id(INT)
+-quantity(INT)
+
+CONSULTAS MULTIPLES
+
+14.- Queremos conocer qué productos tienen un volumen de ventas destacado.
+Escribe una consulta SQL que muestre el nombre del producto y el total de unidades vendidas, pero solo para aquellos productos cuyo total supere las 500 unidades.
+Utilizá una expresión común (CTE, con WITH) para calcular primero el total de unidades vendidas por cada producto.
+Tablas disponibles
+productos:
+-id(INT)
+-nombre(VARCHAR)
+-precio_unitario(DECIMAL)
+
+ventas:
+-id(INT)
+-id_producto(INT)
+-cantidad(INT)
+-fecha(DATE)
+
+EXPRESS.JS
+
+1.- ¿Cuál es el propósito principal de express.js?
+a.- Compilar código a otros lenguajes.
+b.- Construir hojas de estilo
+c.- Facilitar la creación de servidores y rutas HTML en Node.js
+d.- Crear Bases de Datos
+e.- Diseñar animaciones en frontend
+
+USO DE app.use
+
+2.- ¿Para que utiliza app.use() en Express?
+a.- registrar middlewares que se aplican a todas las rutas
+b.- Reiniciar el servidor automáticamente
+c.- Definir controladores de errores
+d.- Definir variables de entorno
+e.- Enviar archivos JSON al cliente
+
+MIDDLEWARE CONDICIONAL
+
+3.-¿Cómo se aplica un middleware a una ruta específica?
+a.- Asignándolo a todas las rutas con app.use()
+b.- Insertándolo en el archivo package.json
+c.- Pasándolo como argumento al declarar esa ruta
+d.- Importando el módulo desde el frontend
+e.- Configurando una variable global
+
+USO DE res.render
+
+4.- ¿Qué función tiene res.render() en Express?
+a.- Guarda datos en una base de datos
+b.- aplica estilos al archivo CSS
+c.- Redirige al usuario a otra URL
+d.- Renderiza una vista usando el motor de plantillas configurado
+e.- Ejecuta scripts del lado del cliente
+
+ESRUCTURA DE VISTAS
+
+5.- ¿Dónde se suelen ubicar las vistas en un proyecto MVC?
+a.- Dentro de los controladores
+b.- Junto a los archivos de confiración
+c.- En una carpeta llamada 'views' dentro de la estructura del proyecto
+d.- En la raíz del proyecto con un nombre 'HTML'
+e.- En la misma carpeta que las rutas
+
+CONTROLADORES EN MVC
+
+6.- ¿cúal es la función del controlador MVC?
+a.- Renderizar directamente archivos JSON
+b.- Almacenar los estilos CSS del sitio
+c.- Gestionar la lógica de las rutas y conectar modelo con vista
+d.- Dividir vistas por colores temáticos
+e.- Controlar los errores de la base de datos
+
+LECTURA DEL ARCHIVO JSON
+
+7.- ¿Qué método de Node.js permite leer el contenido de un archivo JSON?
+a.- console.log(fs)
+b.- JSON.stringify
+c.- fs.writeFile
+d.- fs.readFile o fs.readFileSync
+e.- require("json-parse")
+
+PERSISTENCIA SIN BASE DE DATOS
+
+8.-¿Que desventaja tiene usar archivos JSON en lugar de bases de datos?
+a.- No se pueden modificar una vez creados
+b.- Solo sirven para frontend
+c.- No manejan consurrencia ni escalabilidad de forma eficiente
+d.- Requieren conexión permanente a internet
+e.- No permiten almacenar objetos
+
+ARCHIVO PRINCIPAL EN NODE
+
+9.- ¿-qué define el archivo package.json como punto de entrada?
+a.- Propiedad "main"
+b.- El script declarado como "start"
+c.- La ruta del archivo .env
+d.- El primer archivo que se encuentra en la raíz
+e.- La función app.listen()
+
+ERROR COMÚN AL IMPORTAR MÓDULOS
+
+10.- ¿Qué ocurre si se omite el './' al importar un módulo local?
+a.- Node intenta buscar el módulo en node_modules y no lo encuentra
+b.- Se borra el contenido del archivo
+c.- El servidor escucha en el puerto incorrecto
+d.- La app reincia en bucle infinito
+e.- No se puede usar require nunca más
+
+NODE.JS
+PROCESAMIENTO DE LA RESPUESTA
+
+1.- ¿Qué devuelve uns consulta a la base de datos en Node.js?
+a.- Un valor booleano
+b.- Un objeto con filar y metadatos
+c.- Una cadena HTML renderizada
+d.- Una lista de rutas públicas
+e.- Un archivo JSON sin procesar
+
+CONSULTAS PARAMETRIZADAS
+
+2.- ¿Para qué se usan las consultas parametrizadas?
+a.- Desactivar la conexión segura
+b.- Reducir el tamaño de la base
+c.- Aumentar la velocidad del SELECT
+d.- Evitar inyecciones SQL
+e.- Convertir datos a CSV
+
+MANEJO DE ERRORES EN CONSULTAS
+
+3.- ¿Cómo se debe manejar un error en una consulta SQL en Node?
+a.- Omitiendo la validación de entrada
+b.- Mostrando el error directamente al usuario
+c.- Respondiendo con código 200 siempre
+d.- capturando excepciones con try/catch y gestionando el resultado
+e.- Reiniciando el servidor al fallar
+
+ELIMINACION DE REGISTROS
+
+4.- ¿Cómo se borra un registro en SQL?
+a.- Con SELECT y un parámetro LIMIT
+b.- Aplicando UPDATE a null
+c.- Usando DELETE con una condición WHERE
+d.- Incluyendo una condición INSERT
+e.- Mediante TRUNCATE con parámetros
+
+PREVENCIÓN AL BORRAR DATOS
+
+5.-¿Por qué es importante usar WHERE  al hacer un DELETE?
+a.- Par agregar un índice de búsqueda
+b.- Para evitar eliminar todos los registros de la tabla
+c.- Porque no funciona sin LIMIT
+d.- Porque WHERE obliga a usar claves primarias
+e.- Para aplicar orden alfabético
+
+TRANSACCIÓN EN Node.js
+
+6.- ¿Cómo se implementa una transacción en Node con PosgreSQL?
+a.- Usando fs.transaction() con JSON
+b.- Usando client.query('BEGIN'), luego consultas, y 'COMMIT' o 'ROLLBACK'
+c.- Enviando una query dentro de app.listen()
+d.- aplicando un forEach con INSERTS
+e.- Usando async.map() directamente
+
+USO DE SEQUELIZE
+
+7.- ¿Para qué se usa Sequelize en Node.js?
+a.- ejecutar código asíncrono en HTML
+b.- Gestionar archivos del sistema
+c.- Validar formularios con Express
+d.- diseñar interfaces gráficas
+e.- Para interactuar con bases de datos usando modelos JavaScript
+
+TIPOS DE DATOS EN MODELOS
+
+8.- ¿Qué define el tipo Sequelize.STRING en un modelo?
+a.- Un objeto JSON interno
+b.- Un valor booleano true o false
+c.- Un número entero autoincremetal 
+d.- Una clave foránea
+e.- Un campo de texto como una columna de tipo varchar
+
+ACTUALIZACION EN ORM
+
+9.- ¿Cómo se actualiza un registro Sequelize?
+a.- Modificando el archivo .env
+b.- Aplicando .set() directamente en la vista
+c.- Usando Model.edit{}
+d.- Usando Model.update(datos, { where: {id} })
+e.- Enviadno datos a través de GET
+
+UNO A UNO EN BASE DE DATOS
+
+10.- ¿Qué implica una relación uno a uno?
+a.- Cada registro en una tabla se relaciona con uno de otra tabla
+b.- Un campo puede tener mpultiples valores
+c.- Dos modelos se duplican entre sí
+d.- Cada campo debe tener una clave primaria
+e.- El modelo es obligatorio en ambas direcciones
+
+belongsTo EN RELACIONES
+
+11.- ¿Para qué se usa belongsTo en Sequelize?
+a.- Indica que un modelo pertenece a otro (clave foránea)
+b.- Define un modelo sin relaciones
+c.- Renombre atributos del modelo
+d.- elimina relaciones uno a muchos
+e.- Agrupa modelos con la misma clave primaria
+
+CREACION DE RELACION DE MUCHOS A MUCHOS
+
+12.- ¿Cómo se cre una relación de muchos a muchos en Sequelize?
+a.- Usando belongsToMany en ambos modelos con la opción through
+b.- Vinculando IDs con una función map{}
+c.- Sincronizando cada tabla manualmente
+d.- Declarando claves compuestas en un solo modelo
+
+API BACKEND NODE EXPRESS
+FORMATO RECOMENDADO EN REST
+
+1.- ¿Qué formato es común para el intercambio de datos REST?
+a.- XML Únicamente
+b.- HTML
+c.- CSV
+d.- JSON
+e.- PDF
+
+USO DE PUT
+
+2.- ¿Cuál es el us correcto del verbo PUT en REST?
+a.- Reemplazar un recurso existente por completo
+b.- Obtener la lista de recursos
+c.- Agregar un campo a un recurso existente
+d.- Validar el contenido del servidor
+e.- Eliminar todos los recursos
+
+VERBOS SEGUROS EN REST
+
+3.- ¿Cuál de estos verbos HTTP se considera seguro según el estándar REST?
+a.- GET
+b.- DELETE
+c.- PATCH
+d.- PUT
+e.- POST
+
+SERIALIZACION DE DATOS
+
+4.- ¿Qué es serializar datos en una API?
+a.- Convertir un archivo JS a binario
+b.- Ejecutar funciones de control
+c.- Validar credenciales del usuario
+d.- Convertir objetos a formato JSON para ser enviados
+e.- Transformar HTML a texto plano
+
+CODIGOS DE ERROR 500
+
+5.- ¿Qué representa un error 500?
+a.- Recurso ya no disponible
+b.- Un error interno del servidor
+c.- Demora por red lenta
+d.- Petición con formato incorrecto
+e.- Fallo de autenticación del usuario
+
+RUTA CON PARÁMETRO DINÁMICO
+
+6.- ¿Cómo se deffine una ruta con parámetro dinámico en Express?
+a.- app.id('/usuarios',...)
+b.- app.route('/:id/usuarios',...)
+c.- app.get('/usuarios/:id',...)
+d.- app.param('usuarios',...)
+e.- app.post('/usuarios?id='...)
+
+ERROR ASINCRONICO EN RUTAS
+
+7.- ¿Qué se debe hacer al manejar errores en funciones async?
+a.- Usar console.log únicamente 
+b.- Encapsular con try/catch y enviar un código de error apropiado
+c.- Permitir que se caiga el servidor
+d.- Reinciar el backend automáticamente
+e.- Mostrar el error al cliente sin filtrar
+
+QUÉ ES UN JWT?
+
+8.- ¿Qué es un JWT (JSON Web Token)?
+a.- Un archivo de estilos para usuarios
+b.- Un token que contiene información cifrada para auntenticación
+c.- Una cabecera HTTP personalizada
+d.- Un tipo de cookie externa
+e.- Una base de datos local del navegador
+
+VERIFICACIÓN DEL TOKEN
+
+9.- ¿Qué hace la función jwt.verify()?
+a.- Crea una nueva clave secreta
+b.- Verifica que el token es válido y no ha sido alterado
+c.- Decodifica un archivo HTML
+d.- Elimina el token del almacenamiento
+e.- Actaliza el token con nuevos datos
+
+EVITAR ATAQUES CON JWT
+
+10.-¿Qué ayuda a prevenir ataques con tokens JWT?
+a.- No usar expiración en los tokens
+b.- Usar HTTPS y claves secretas robustas en la firma
+c.- Emitir tokens con firmas públicas
+d.- Compartir el token por correo
+e.- Incluir datos sensibles sin cifrar
+
+
