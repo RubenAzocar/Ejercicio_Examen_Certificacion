@@ -762,7 +762,11 @@
                 autoCloseBrackets: true,
                 matchBrackets: true,
                 tabSize: 2,
-                extraKeys: { "Ctrl-Space": "autocomplete" }
+                extraKeys: { 
+                    "Ctrl-Space": "autocomplete",
+                    "Tab": "emmetExpandAbbreviation",
+                    "Enter": "emmetInsertLineBreak"
+                }
             });
 
             codeEditor.setValue(state.answers[state.currentIndex] || "");
