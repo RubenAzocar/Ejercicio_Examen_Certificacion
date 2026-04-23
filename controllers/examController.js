@@ -765,10 +765,19 @@
                 extraKeys: { 
                     "Ctrl-Space": "autocomplete",
                     "Tab": "emmetExpandAbbreviation",
-                    "Enter": "emmetExpandAbbreviation"
+                    "Enter": (cm) => {
+                        if (cm.execCommand("emmetExpandAbbreviation") === CodeMirror.Pass) {
+                            return CodeMirror.Pass;
+                        }
+                    }
                 },
                 emmet: true
             });
+
+            // Forzar inicialización de Emmet si el plugin lo requiere
+            if (typeof emmetCodeMirror === "function") {
+                emmetCodeMirror(codeEditor);
+            }
 
             codeEditor.setValue(state.answers[state.currentIndex] || "");
 
