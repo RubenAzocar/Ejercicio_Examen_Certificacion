@@ -205,3 +205,27 @@ select {
 }
 
 .hidden { display: none !important; }
+
+/* CodeMirror Autocomplete Hint Box (Premium Styling) */
+.CodeMirror-hints {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+    padding: 8px !important;
+    font-family: 'Inter', sans-serif !important;
+    backdrop-filter: blur(10px) !important;
+    z-index: 1000 !important;
+}
+
+.CodeMirror-hint {
+    color: var(--text-muted) !important;
+    padding: 6px 12px !important;
+    border-radius: 6px !important;
+    font-size: 0.9rem !important;
+}
+
+.CodeMirror-hint-active {
+    background-color: var(--primary) !important;
+    color: white !important;
+}

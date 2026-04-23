@@ -765,8 +765,9 @@
                 extraKeys: { 
                     "Ctrl-Space": "autocomplete",
                     "Tab": "emmetExpandAbbreviation",
-                    "Enter": "emmetInsertLineBreak"
-                }
+                    "Enter": "emmetExpandAbbreviation"
+                },
+                emmet: true
             });
 
             codeEditor.setValue(state.answers[state.currentIndex] || "");
@@ -780,6 +781,13 @@
                 renderCodeCoach(val, q);
                 updateProgressiveGuides(val, q);
                 updateLearningMetrics();
+            });
+
+            // Ghost Recommendations (Autocomplete as you type)
+            codeEditor.on("inputRead", (cm, change) => {
+                if (change.origin === "+input") {
+                    cm.showHint({ completeSingle: false });
+                }
             });
         } else {
             const wrap = document.createElement("div");
