@@ -751,35 +751,48 @@
             questionBody.appendChild(area);
 
             const promptText = (q.prompt || "").toLowerCase();
+            const moduleId = state.module ? state.module.id : 0;
             let mode = "javascript";
-            if (promptText.includes("sql") || promptText.includes("consulta")) mode = "text/x-sql";
-            if (promptText.includes("html") || promptText.includes("css")) mode = "htmlmixed";
+            
+            // Detección mejorada del lenguaje para el resaltado
+            if (moduleId === 4 || promptText.includes("sql") || promptText.includes("consulta") || promptText.includes("select") || promptText.includes("update") || promptText.includes("insert") || promptText.includes("delete")) {
+                mode = "text/x-sql";
+            } else if (moduleId === 1 || promptText.includes("html") || promptText.includes("css") || promptText.includes("div") || promptText.includes("<") || promptText.includes("clase")) {
+                mode = "htmlmixed";
+            }
 
-            codeEditor = CodeMirror.fromTextArea(area, {
-                mode: mode,
-                theme: "dracula",
-                lineNumbers: true,
-                autoCloseBrackets: true,
-                matchBrackets: true,
-                tabSize: 2,
-                extraKeys: { 
-                    "Ctrl-Space": "autocomplete",
-                    "Tab": "emmetExpandAbbreviation",
-                    "Enter": (cm) => {
-                        // Intentar expandir abreviación Emmet
-                        const result = cm.execCommand("emmetExpandAbbreviation");
-                        // Si el comando no existe o no pudo expandir, pasar al siguiente manejador (nueva línea)
-                        if (result === CodeMirror.Pass || result === undefined) {
-                            return CodeMirror.Pass;
+            try {
+                codeEditor = CodeMirror.fromTextArea(area, {
+                    mode: mode,
+                    theme: "dracula",
+                    lineNumbers: true,
+                    autoCloseBrackets: true,
+                    matchBrackets: true,
+                    tabSize: 2,
+                    extraKeys: { 
+                        "Ctrl-Space": "autocomplete",
+                        "Tab": "emmetExpandAbbreviation",
+                        "Enter": (cm) => {
+                            // Intentar expandir abreviación Emmet
+                            const result = cm.execCommand("emmetExpandAbbreviation");
+                            // Si el comando no existe o no pudo expandir, pasar al siguiente manejador (nueva línea)
+                            if (result === CodeMirror.Pass || result === undefined) {
+                                return CodeMirror.Pass;
+                            }
                         }
-                    }
-                },
-                emmet: true
-            });
+                    },
+                    emmet: true
+                });
 
-            // Forzar inicialización de Emmet si el plugin lo requiere
-            if (typeof emmetCodeMirror === "function") {
-                emmetCodeMirror(codeEditor);
+                // Forzar inicialización de Emmet si el plugin lo requiere
+                if (typeof emmetCodeMirror === "function") {
+                    emmetCodeMirror(codeEditor);
+                }
+            } catch (err) {
+                console.error("Error al inicializar CodeMirror:", err);
+                // Fallback: usar el textarea normal si CodeMirror falla
+                area.style.display = "block";
+                area.classList.add("fallback-editor");
             }
 
             codeEditor.setValue(state.answers[state.currentIndex] || "");
@@ -920,7 +933,8 @@
             }
 
             const normalized = answer.toLowerCase();
-            const hasAll = q.expectedKeywords.every((kw) => normalized.includes(String(kw).toLowerCase()));
+            const keywords = q.expectedKeywords || [];
+            const hasAll = keywords.length === 0 || keywords.every((kw) => normalized.includes(String(kw).toLowerCase()));
 
             return {
                 ok: hasAll,
