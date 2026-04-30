@@ -671,18 +671,20 @@
     function handleGlobalKeys(e) {
         if (state.submitted) return;
         
-        // Evitar disparar atajos si el usuario está escribiendo en el editor
+        // Evitar disparar atajos si el usuario está interactuando con inputs o el editor
+        const tag = document.activeElement?.tagName || "";
+        if (tag === "TEXTAREA" || tag === "INPUT") return;
         if (codeEditor && codeEditor.hasFocus()) return;
 
         if (e.key.toLowerCase() === "h") toggleHint();
+        if (e.key.toLowerCase() === "e") explainCurrentQuestion();
         if (e.key.toLowerCase() === "s") toggleSolution();
+        
         if (e.key === "ArrowRight" && !nextBtn.disabled) {
-            state.currentIndex++;
-            renderQuestion();
+            nextBtn.click();
         }
         if (e.key === "ArrowLeft" && !prevBtn.disabled) {
-            state.currentIndex--;
-            renderQuestion();
+            prevBtn.click();
         }
     }
 
@@ -705,6 +707,8 @@
     }
 
     function renderQuestion() {
+        destroyEditor(); // Limpiar instancia anterior primero para evitar errores de DOM
+
         const q = state.questions[state.currentIndex];
         if (!q) return;
 
@@ -745,7 +749,6 @@
             checklistBox.appendChild(ul);
             checklistBox.classList.remove("hidden");
 
-            destroyEditor(); // Limpiar instancia anterior
             const area = document.createElement("textarea");
             area.id = "code-editor-area";
             questionBody.appendChild(area);
@@ -771,15 +774,7 @@
                     tabSize: 2,
                     extraKeys: { 
                         "Ctrl-Space": "autocomplete",
-                        "Tab": "emmetExpandAbbreviation",
-                        "Enter": (cm) => {
-                            // Intentar expandir abreviación Emmet
-                            const result = cm.execCommand("emmetExpandAbbreviation");
-                            // Si el comando no existe o no pudo expandir, pasar al siguiente manejador (nueva línea)
-                            if (result === CodeMirror.Pass || result === undefined) {
-                                return CodeMirror.Pass;
-                            }
-                        }
+                        "Tab": "emmetExpandAbbreviation"
                     },
                     emmet: true
                 });
@@ -1012,24 +1007,6 @@
             renderQuestion();
         } else {
             updateSidebarForQuestion();
-        }
-    });
-
-    document.addEventListener("keydown", (event) => {
-        const tag = document.activeElement?.tagName || "";
-        if (tag === "TEXTAREA" || tag === "INPUT") return;
-
-        if (event.key === "ArrowLeft" && !prevBtn.disabled) {
-            prevBtn.click();
-        }
-        if (event.key === "ArrowRight" && !nextBtn.disabled) {
-            nextBtn.click();
-        }
-        if (event.key.toLowerCase() === "h") {
-            hintBtn.click();
-        }
-        if (event.key.toLowerCase() === "e") {
-            explainBtn.click();
         }
     });
 
