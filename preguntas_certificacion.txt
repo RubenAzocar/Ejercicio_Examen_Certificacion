@@ -51,7 +51,7 @@ d.- rebase crea una copia del repositorio y merge no
 e.- merge elimina automaticamente las ramas fusionadas
 
 7.- Utilizando HTML, cree un contenedor (div) que incluya un encabezado {h1}
- con el texto "Bienvenidos". El contenido debe estar centrado tanto vertical 
+ con el texto "Bienvenidos". El contenido debe estar centrado tanto vertical
  como horizontalmente, con fondo color celeste {#87CEEB}y texto en color blanco.
 
 8.- Utilizando HTML y estilos, cree un boton con la etiquet "enviar" que cumpla
@@ -67,7 +67,7 @@ JAVA SCRIPT
 1.- para resolver este ejercicio debera utilizar JavaScript
 tu equipo esta desarrollandoun sistema para registrar temperaturas diarias y calcular estadisticas, pero el codigo esta incompleto.
 tu tarea es completar el calculo de la temperatura maxima, minima y el promedio semanal.
-escribir el codigo a partir del comentario indicado dentro del bucle, no borres el comentario ni modifiques el resto del codigo: 
+escribir el codigo a partir del comentario indicado dentro del bucle, no borres el comentario ni modifiques el resto del codigo:
 function analizarTemperaturas{temperaturas}{
   if {temperaturas.length === 0) {
     return {
@@ -92,6 +92,32 @@ function analizarTemperaturas{temperaturas}{
   };
  }
 
+ RESPUESTA:
+ function analizarTemperaturas(temperaturas) {
+  if (temperaturas.length === 0) {
+    return { promedio: null, maxima: null, minima: null };
+  }
+
+  let suma = 0;
+  let minima = temperaturas[0];
+  let maxima = temperaturas[0];
+
+  for (let temp of temperaturas) {
+    suma += temp;
+    // CODIGO DE LA RESPUESTA CORRECTA //
+    if (temp < minima) {
+      minima = temp;
+    }
+    if (temp > maxima) {
+      maxima = temp;
+    }
+  }
+
+  let promedio = suma / temperaturas.length;
+
+  return { promedio, maxima, minima };
+}
+
 2.- Para resolver este ejercicio, deberas utilizar JavaScript
 Tu equipo esta desarrollando una funcion que recibe un string y devuleve las palabras que tengan alguna coincidencia con el string recibido, pero el mismo esta incompleto.
 tu tarea es completar el codigo a partir del comentario indicado dentro de la funcion. Considera que la funcion no tiene que diferenciar entre mayusculas y minusculas.
@@ -102,7 +128,21 @@ function filtrarPalabras{palabra} {
   if (palabra.length < 3) {
      return palabrasTotal;
 }
-  // escribe aqui tu codigo //
+  // escribe aqui tu codigo //ODIGO RESPUESTA
+
+  return palabrasTotal.filter(p => p.toLowerCase().includes(palabra.toLowerCase()));
+/*
+|      |               |    |    |             |   |                              |
+|      |               |    |    |             |   |                              |
+|      |               |    |    |             |   |                              └─ Fin de la instrucción
+|      |               |    |    |             |   └─ 5. Lo que buscamos (en minúsculas)
+|      |               |    |    |             └─ 4. Método de búsqueda
+|      |               |    |    └─ 3. Convertir a minúsculas
+|      |               |    └─ Nombre de la variable temporal
+|      |               └─ 2. Flecha de función
+|      └─ 1. El método que filtra
+└─ Devolvemos el array final
+*/
 
 CONCEPTOS BASICOS DE OOP (POO)
 
@@ -112,6 +152,7 @@ b.- define Class MiClase {}
 c.- class MiClase {}
 d.- function MiClase{} {}
 e.- const MiClase = new Class{} {}
+RESPUESTA: C.- class miclase{}
 
 2.- ¿Que palabra clave en Javacript se usa para permitir que una clase herede de otra?
 a.- implements
@@ -119,6 +160,7 @@ b.- extends
 c.- protoptype
 d.- superclass
 e.- inherits
+RESPUESTA: b extends
 
 3.- ¿que sucede cuando una subclase en JavaScript redefine una propiedad del constructor de su clase padre?
 a.- La nueva propiedad reemplaza la de la clase padre en la instancia
@@ -126,6 +168,7 @@ b.- la propiedad queda como undefined
 c.- Se genera un error si se sobreescribe la propiedad
 d.- Ambas pripiedades coexisten con distintos valores
 e.- la propiedad original se mantiene sin cambios
+RESPUESTA: a la nueva propiedad reemplaza la de la clase padre en la instancia
 
 ESPECIFICACION ES6+
 4.- ¿Cual de las siguientes palabras clave se introdujo en ES6 para declarar variables con ambito de bloque?
@@ -134,6 +177,7 @@ b.- const
 c.- let
 d.- mutable
 e.- static
+RESPUESTA: c let
 
 5.- ¿Cual es la principal ventaja de usar desestructuracion de objetos en JavaScript ES6?
 a.-Mejora el rendimiento de ejecucion del codigo
@@ -141,6 +185,7 @@ b.- No tiene ninguna ventaja sobre la notación tradicional de puntos (obj.propi
 c.- Permite modificar las propiedades del objeto sin afectar la variable original
 d.- convierte los objetos en arrays automaticamente.
 e.- Perrmite extraer valores de objetos de forma mas concisa.
+RESPUESTA: e permite extraer valores de objetos de forma mas concisa
 
 6.- ¿Cual es la salida del siguiente codigo en JavaScript ES6+?
   const obj = {
@@ -160,6 +205,7 @@ b.- TypeError: Cannot asign to read only property 'd'
 c.- undefined
 d.- ReferenceError: rest is not defined
 e.- 3
+RESPUESTA: a 42
 
 EFECTOS Y MANIPULACION DEL DOM
 
@@ -169,6 +215,7 @@ b.- Al evento en si mismo
 c.- al objeto window
 d.- a la funcion manejadora
 e.- a null
+RESPUESTA: a Al boton que disparo el evento
 
 8.- ¿ Que efecto tiene el metodo stopPropagation{} en un manejador de eventos en el DOM?
 a.- reinicia la propagacion desde el elemento raiz
@@ -176,6 +223,7 @@ b.- cancela el evento por completo, incluyendo acciones del navegador
 c.- impide que elevento se propague a elementos padres
 d.- detiene la ejecucion del callback
 e.- evita que el evento se dispare
+RESPUESTA: c impide que el evento se propague a elementos padres
 
 9.- Cuando se utiliza flecha dentro de un setTimeout{} en un manejador de eventos, ¿a que hace referencia this?
 a.- a window
@@ -183,6 +231,7 @@ b.- al objeto event
 c.- a null
 d.- al boton que disparó el evento
 e.- añ setTimeout
+RESPUESTA: d al boton que disparo el evento
 
 JAVASCRIPT ASINCRONICO
 
@@ -192,6 +241,7 @@ b.- await
 c.- setTimeout
 d.- promise
 e.- async
+RESPUESTA: e async
 
 11.- ¿Que funcion cumple el metodo .finally{} en una cadena de promesas?
 a.- se ejecuta  solo si la promesa fue resuelta con exito.
@@ -199,6 +249,7 @@ b.- Evitta que se propague cualquier error posterior
 c.- Se ejecuta siempre, independientemente del resultado de la promesa
 d.- Finaliza la ejecucion de la promesa de forma forazada.
 e.- Captura errores que no se manejaron con .catch().
+RESPUESTA: c se ejecuta siempre, independiente del resultado de la promesa
 
 12.- ¿Que efecto tiene el uso de await dentro de una funcion async sobre el orden de ejecucion del codigo?
 a.- Hace que el codigo posterior al await se ejecute inmediatamente
@@ -206,6 +257,7 @@ b.- Bloquea toda la ejecucion del programa hasta que se resuelva la promesa
 c.- Permite que otras tareas del event loop se ejecuten antes de continuar
 d.- Ignora la promesa y continua con la ejecucuin sin esperar
 e.- Convierte el codigo en  sincronico automaticamente
+RESPUESTA: c permite que otras tareas del event loop se ejecuten antes de continuar
 
 13.- ¿Cual es la diferencia entre el async/await y .then{} en promesas?
 a.- async/await permite escribir codigo asincrono de manera  mas legible y estructurada en comparacion con .then{}
@@ -213,6 +265,7 @@ b.- .then{} solo se usa con setTimeout, mientras que async/await es para fetch
 c.- async/await no es compatible con promesas, solo con setinterval
 d.- .then{} bloquea la ejecucion del codigo hasta que la promesa se resuelva, mientras que async/await no
 e.- async/await no permite manejar errores, mientras que .then() si
+RESPUESTA: a async/await permite escribir codigo asincrono de manera mas legible y estructurada que con .then{}
 
 14.- ¿Cual es la diferencia entre Promise.allSettled{} y promise.all{}?
 a.- promise.all{} devuelve una promesaque siempre se resuelve, incluso su una de sus promesas falla
@@ -220,6 +273,7 @@ b.- promise.allSettled{} espera a que todas las promesas terminen (resueltas o r
 c.- promise.all{} y promise.allSettled{} funcionan exactamente igual
 d.- promise.allSettled{} se usa exclusivamente con async/await, mientras que promise.all{} son con .then{}
 e.- promise.all{} espera a que todas las promesas sean resueltas o rechazadas, mientras que promise.allSettled{}solo espera resoluciones.
+RESPUESTA: b promise.allSettled() espera a que todas las promesas terminen (resueltas o rechazadas) mientras que promise.all{} falla si una es promesa rechazada
 
 15.- ¿Que ocurre si se utiliza try...catch en una funcion async, pero el rechazo de la promesa no es manejado dentro del bloque try?
 a.- el codigo lanza una excepcion en tiempo de compilacion
@@ -227,6 +281,7 @@ b.- el error se propaga y puede capturarse con .catch{}
 c.- el try...catch convierte el error en una advertencia
 d.- la funcion async atrapa automaticamente todos los errores
 e.- eñ rechazo se ignora y la funcion retorna undefined
+RESPUESTA: b el error se propaga y puede capturarse con .catch{}
 
 SQL
 
@@ -236,6 +291,7 @@ b.- DELETE FROM clientes;
 c.- REMOVE FROM clientes WHERE id_cliente = 5;
 d.- DELETE FROM clientes WHERE id_cliente = 5;
 e.- DELETE clientes WHERE id_cliente = 5;
+RESPUESTA: D REMOVE FROM CLIENTES WHERE ID_CLIENTES = 5;
 
 2.- ¿Como eliminarias todos los registros realizados antes del año 2023 en la tbla Pedidos?
 a.- DROP pedidos WHERE fecha < '2023-01-01';
@@ -243,6 +299,7 @@ b.- DELETE FROM Pedidos WHERE fecha <'2023-01-01';
 c.- DELETE Pedidos WHERE fecha < '2023-01-01';
 d.- DELETE FROM Pedidos; WHERE fecha < '2023-01-01';
 e.- REMOVE FROM Pedidos WHERE fecha < '2023-01-01';
+RESPUESTA: B DELETE FROM PEDIDOS WHERE FECHA < '2023-01-01';
 
 3.- ¿Cual de las siguientes consultas devuelve, para cada cliente, la cantidad total de pedidos y cuantos de esos fueron entregados en 2024 {estado = 'entregado' y fecha dentro de 2024}?
 (las tablas son: Pedidos{id_pedido, id_cliente, fecha, estado})
@@ -266,16 +323,21 @@ c.- SELECT id_cliente,
     GROUP BY id_cliente;
 d.- SELECT id_cliente,
     COUNT(+) AS total_pedidos,
-    FILTER(WHERE estado = 'Entregado' AND YEAR(fecha) = 2024) AS 
+    FILTER(WHERE estado = 'Entregado' AND YEAR(fecha) = 2024) AS
     entregados_2024
     FROM Pedidos
     GROUP BY id_cliente;
 e.- SELECT id_cliente,
     count(*) AS total_pedidos,
-    SUM(CASE WHEN estado = 'Entregado' AND fecha BETWEEN '2024-01-01' AND 
+    SUM(CASE WHEN estado = 'Entregado' AND fecha BETWEEN '2024-01-01' AND
     '2024-12-31' WHEN 1 ELSE 0 END) AS entregados_2024
     FROM Pedidos
-    GROUP BY id_cliente;
+    RESPUESTA: B SELECT id_cliente,
+                 COUNT(*) AS total_pedidos,
+                 COUNT(CASE WHEN estado = 'Entregado' AND YEAR(fecha) = 2024 THEN 1 END)
+                 AS entregados_2024
+                 FROM Pedidos
+                 GROUP BY id_cliente;
 
 4.- ¿Como cambiarias el tipo de dato de la columna telefono en la tabla Clientes a VARCHARD(20)?
 a.- ALTER TABLE clientes ,MODIFY telefono VARCHARD(20);
@@ -283,6 +345,7 @@ b.- MODIFY TABLE clientes CHANGE COLUMN telefono VARCHARD(20);
 c.- EDIT TABLE clientes CHANGE COLUMN telefono VARCHARD(20);
 d.- UPDATE TABLE clientes ,MODIFY COLUMN telefono VARCHARD(20);
 e.- REDEFINE TABLE clientes ALTER COLUMN  telefono VARCHARD(20);
+RESPUESTA: A  ALTER TABLE clientes ,MODIFY telefono VARCHARD(20);
 
 5.- ¿Como cambiar el nombre de la tabla Empleados a Personal?
 a.-CHANGE TABLE Empleados TO Personal;
@@ -290,6 +353,7 @@ b.- ALTER TABLE Empleados RENAME TO Personal;
 c.- UPDATE TABLE Empleados TO Personal;
 d.- MODIFY TABLE Empleados RENAME Personal;
 e.- RENAME Empleados AS Personal;
+RESPUESTA: B ALTER TABLE Empleados RENAME TO Personal;
 
 CREAR UNA TABLA CON CLAVE PRIMARIA COMPUESTA
 6.- ¿Cual de las siguientes sentencias te permite colocar una restriccion para que el campo edad permita solo edades entre 18 y 65?
@@ -298,6 +362,7 @@ b.- CONSTRAIN (edad >= 18 AND edad <=65)
 c.- CHECK edad BETWEEN 18 AND 65
 d.- CONSTRAIN edad BETWEEN 18 AND 65
 e.- CHECK CONSTRAIN edad BETWEEN 18 AND 65
+RESPUESTA: A CHECK (edad >=18 AND edad <=65)
 
 DEFINICION DE ENTIDAD
 
@@ -307,6 +372,7 @@ b.- Un conjunto de daos agrupados en una tabla secundaria
 c.- Una entidad, ya que cada paciente es un objeto con existencia propia y atributos identificables
 d.- Una propiedad del sistema que describe los datos clínicos
 e.- Un índice compuesto que garantiza la unicidad de los pacientes registrados
+RESPUESTA: C UNA ENTIDAD, YA QUE CADA PACIENTE ES UN OBJETO CON EXISTENCIA PROPIA Y ATRIBUTOS IDENTIFICABLES
 
 ENTIDAD CON CLAVE FORÁNEA
 
@@ -316,6 +382,7 @@ b.- Con una línea de relación y un rombo
 c.- Con un circulo que conecta las entidades
 d.- Con una línea que conecta la entidad con la tabla que contiene la clave foránea
 e.- Con una flecha apuntando hacia la entidad de origen
+RESPUESTA: A Con una línea que conecta la entidad con otra entidad dinde la clave primaria de esta última se convierte en la clave foránea
 
 CLAVE PRIMARIA
 
@@ -325,6 +392,7 @@ b.- Una clave derivada que se genere automáticamente a partir de otros atributo
 c.- Una clave primaria en la entidad Camión, compuesta o simple, que identifique de forma unica a cada instancia
 d.- Una clave foránea desde la entidad Camión hacia la entidad Conductor
 e.- Una relación de tipo 1:1 entre Camión y otra entidad que actúe como identificador
+RESPUESTA: C Una clave primaria en la entidad Camión, compuesta o simple, que identifique de forma unica a cada instancia
 
 10.- estás diseñando una base de datos para una empresa de recursos humanos. En la entidad Empleado, necesitas almacenar el domicilio completo (calle, número, ciudad, y código postal), pero también quieres poder consultar cada uno de eses datos por separado. ¿Como deberías modelar esta información en el diagrama entidad-relación?
 a.- como un atributo de tipo JSON para mantener la estructura agrupada con atributos más simples como calle, número, ciudad y código postal.
@@ -332,6 +400,7 @@ b.- Como atributo multivaluado, ya que contiene varios datos posibles para un mi
 c.- Como un atributo dericado que se genera automáticamente a partir de la dirección ingresada
 d.- Como un atributo compuesto llamado domicilio, que se divide en atributos más simples como calle, número, ciudad y código postal
 e.- Como una clave foránea que conecta la entidad Empleado con una entidad Domicilio
+RESPUESTA d
 
 HERENCIA EN EL MODELO ER
 
@@ -341,6 +410,7 @@ b.- Puede ocurrir una condición de carrera (race condition) y sobreescribe el v
 c.- El motor aborta automáticamente una de las transacciones; no se requiere ajuste adicional.
 d.- Ocurre un phantom read que puede evitarse usando ROLLBACK automático al detectar camnios en la tabla.
 e.- Ambas transacciones quedan bloqueadas hasta que una finaliza; es un deadlock inevitable en READ COMMITED
+RESPUESTA B
 
 SQL
 
@@ -393,6 +463,7 @@ b.- Construir hojas de estilo
 c.- Facilitar la creación de servidores y rutas HTML en Node.js
 d.- Crear Bases de Datos
 e.- Diseñar animaciones en frontend
+respuesta: c
 
 USO DE app.use
 
@@ -402,6 +473,7 @@ b.- Reiniciar el servidor automáticamente
 c.- Definir controladores de errores
 d.- Definir variables de entorno
 e.- Enviar archivos JSON al cliente
+respuesta: a
 
 MIDDLEWARE CONDICIONAL
 
@@ -411,6 +483,7 @@ b.- Insertándolo en el archivo package.json
 c.- Pasándolo como argumento al declarar esa ruta
 d.- Importando el módulo desde el frontend
 e.- Configurando una variable global
+respuesta: c
 
 USO DE res.render
 
@@ -420,6 +493,7 @@ b.- aplica estilos al archivo CSS
 c.- Redirige al usuario a otra URL
 d.- Renderiza una vista usando el motor de plantillas configurado
 e.- Ejecuta scripts del lado del cliente
+respuesta: d
 
 ESRUCTURA DE VISTAS
 
@@ -429,6 +503,7 @@ b.- Junto a los archivos de confiración
 c.- En una carpeta llamada 'views' dentro de la estructura del proyecto
 d.- En la raíz del proyecto con un nombre 'HTML'
 e.- En la misma carpeta que las rutas
+respuesta: C
 
 CONTROLADORES EN MVC
 
@@ -438,6 +513,7 @@ b.- Almacenar los estilos CSS del sitio
 c.- Gestionar la lógica de las rutas y conectar modelo con vista
 d.- Dividir vistas por colores temáticos
 e.- Controlar los errores de la base de datos
+respuesta: c
 
 LECTURA DEL ARCHIVO JSON
 
@@ -447,6 +523,7 @@ b.- JSON.stringify
 c.- fs.writeFile
 d.- fs.readFile o fs.readFileSync
 e.- require("json-parse")
+respuesta: d
 
 PERSISTENCIA SIN BASE DE DATOS
 
@@ -456,6 +533,7 @@ b.- Solo sirven para frontend
 c.- No manejan consurrencia ni escalabilidad de forma eficiente
 d.- Requieren conexión permanente a internet
 e.- No permiten almacenar objetos
+respuesta: c
 
 ARCHIVO PRINCIPAL EN NODE
 
@@ -465,6 +543,7 @@ b.- El script declarado como "start"
 c.- La ruta del archivo .env
 d.- El primer archivo que se encuentra en la raíz
 e.- La función app.listen()
+respuesta: a
 
 ERROR COMÚN AL IMPORTAR MÓDULOS
 
@@ -474,6 +553,7 @@ b.- Se borra el contenido del archivo
 c.- El servidor escucha en el puerto incorrecto
 d.- La app reincia en bucle infinito
 e.- No se puede usar require nunca más
+respuesta: a
 
 NODE.JS
 PROCESAMIENTO DE LA RESPUESTA
@@ -484,6 +564,7 @@ b.- Un objeto con filar y metadatos
 c.- Una cadena HTML renderizada
 d.- Una lista de rutas públicas
 e.- Un archivo JSON sin procesar
+respuesta: b
 
 CONSULTAS PARAMETRIZADAS
 
@@ -493,6 +574,7 @@ b.- Reducir el tamaño de la base
 c.- Aumentar la velocidad del SELECT
 d.- Evitar inyecciones SQL
 e.- Convertir datos a CSV
+respuesta: d
 
 MANEJO DE ERRORES EN CONSULTAS
 
@@ -502,6 +584,7 @@ b.- Mostrando el error directamente al usuario
 c.- Respondiendo con código 200 siempre
 d.- capturando excepciones con try/catch y gestionando el resultado
 e.- Reiniciando el servidor al fallar
+respuesta: d
 
 ELIMINACION DE REGISTROS
 
@@ -511,6 +594,7 @@ b.- Aplicando UPDATE a null
 c.- Usando DELETE con una condición WHERE
 d.- Incluyendo una condición INSERT
 e.- Mediante TRUNCATE con parámetros
+respuesta: c
 
 PREVENCIÓN AL BORRAR DATOS
 
@@ -520,6 +604,7 @@ b.- Para evitar eliminar todos los registros de la tabla
 c.- Porque no funciona sin LIMIT
 d.- Porque WHERE obliga a usar claves primarias
 e.- Para aplicar orden alfabético
+respuesta: b
 
 TRANSACCIÓN EN Node.js
 
@@ -529,6 +614,7 @@ b.- Usando client.query('BEGIN'), luego consultas, y 'COMMIT' o 'ROLLBACK'
 c.- Enviando una query dentro de app.listen()
 d.- aplicando un forEach con INSERTS
 e.- Usando async.map() directamente
+respuesta: b
 
 USO DE SEQUELIZE
 
@@ -538,15 +624,17 @@ b.- Gestionar archivos del sistema
 c.- Validar formularios con Express
 d.- diseñar interfaces gráficas
 e.- Para interactuar con bases de datos usando modelos JavaScript
+respuesta: e
 
 TIPOS DE DATOS EN MODELOS
 
 8.- ¿Qué define el tipo Sequelize.STRING en un modelo?
 a.- Un objeto JSON interno
 b.- Un valor booleano true o false
-c.- Un número entero autoincremetal 
+c.- Un número entero autoincremetal
 d.- Una clave foránea
 e.- Un campo de texto como una columna de tipo varchar
+respuesta: e
 
 ACTUALIZACION EN ORM
 
@@ -556,6 +644,7 @@ b.- Aplicando .set() directamente en la vista
 c.- Usando Model.edit{}
 d.- Usando Model.update(datos, { where: {id} })
 e.- Enviadno datos a través de GET
+respuesta: d
 
 UNO A UNO EN BASE DE DATOS
 
@@ -565,6 +654,7 @@ b.- Un campo puede tener mpultiples valores
 c.- Dos modelos se duplican entre sí
 d.- Cada campo debe tener una clave primaria
 e.- El modelo es obligatorio en ambas direcciones
+respuesta: a
 
 belongsTo EN RELACIONES
 
@@ -574,6 +664,7 @@ b.- Define un modelo sin relaciones
 c.- Renombre atributos del modelo
 d.- elimina relaciones uno a muchos
 e.- Agrupa modelos con la misma clave primaria
+respuesta: a
 
 CREACION DE RELACION DE MUCHOS A MUCHOS
 
@@ -582,6 +673,7 @@ a.- Usando belongsToMany en ambos modelos con la opción through
 b.- Vinculando IDs con una función map{}
 c.- Sincronizando cada tabla manualmente
 d.- Declarando claves compuestas en un solo modelo
+respuesta: a
 
 API BACKEND NODE EXPRESS
 FORMATO RECOMENDADO EN REST
@@ -592,6 +684,7 @@ b.- HTML
 c.- CSV
 d.- JSON
 e.- PDF
+respuesta: d
 
 USO DE PUT
 
@@ -601,6 +694,7 @@ b.- Obtener la lista de recursos
 c.- Agregar un campo a un recurso existente
 d.- Validar el contenido del servidor
 e.- Eliminar todos los recursos
+respuesta: a
 
 VERBOS SEGUROS EN REST
 
@@ -610,6 +704,7 @@ b.- DELETE
 c.- PATCH
 d.- PUT
 e.- POST
+respuesta: a
 
 SERIALIZACION DE DATOS
 
@@ -619,6 +714,7 @@ b.- Ejecutar funciones de control
 c.- Validar credenciales del usuario
 d.- Convertir objetos a formato JSON para ser enviados
 e.- Transformar HTML a texto plano
+respuesta: d
 
 CODIGOS DE ERROR 500
 
@@ -628,6 +724,7 @@ b.- Un error interno del servidor
 c.- Demora por red lenta
 d.- Petición con formato incorrecto
 e.- Fallo de autenticación del usuario
+respuesta: b
 
 RUTA CON PARÁMETRO DINÁMICO
 
@@ -637,15 +734,17 @@ b.- app.route('/:id/usuarios',...)
 c.- app.get('/usuarios/:id',...)
 d.- app.param('usuarios',...)
 e.- app.post('/usuarios?id='...)
+respuesta: c
 
 ERROR ASINCRONICO EN RUTAS
 
 7.- ¿Qué se debe hacer al manejar errores en funciones async?
-a.- Usar console.log únicamente 
+a.- Usar console.log únicamente
 b.- Encapsular con try/catch y enviar un código de error apropiado
 c.- Permitir que se caiga el servidor
 d.- Reinciar el backend automáticamente
 e.- Mostrar el error al cliente sin filtrar
+respuesta: b
 
 QUÉ ES UN JWT?
 
@@ -655,6 +754,7 @@ b.- Un token que contiene información cifrada para auntenticación
 c.- Una cabecera HTTP personalizada
 d.- Un tipo de cookie externa
 e.- Una base de datos local del navegador
+respuesta: b
 
 VERIFICACIÓN DEL TOKEN
 
@@ -664,6 +764,7 @@ b.- Verifica que el token es válido y no ha sido alterado
 c.- Decodifica un archivo HTML
 d.- Elimina el token del almacenamiento
 e.- Actaliza el token con nuevos datos
+respuesta: b
 
 EVITAR ATAQUES CON JWT
 
@@ -673,5 +774,6 @@ b.- Usar HTTPS y claves secretas robustas en la firma
 c.- Emitir tokens con firmas públicas
 d.- Compartir el token por correo
 e.- Incluir datos sensibles sin cifrar
+respuesta: b
 
 
