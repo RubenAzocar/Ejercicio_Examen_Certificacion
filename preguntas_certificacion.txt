@@ -414,7 +414,7 @@ RESPUESTA B
 
 SQL
 
-12.- Con lenguaje SQL, completa la siguiente consulta para obtener todos los productos cuyo presio sea mayor a 100 y estado activo o precio menor a 50 y estado inactivo.
+12.- Con lenguaje SQL, completa la siguiente consulta para obtener todos los productos cuyo precio sea mayor a 100 y estado activo o precio menor a 50 y estado inactivo.
 Table disponible:
 productos:
 -id(INT)
