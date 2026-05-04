@@ -21,6 +21,8 @@
     const hintBtn = document.getElementById("hintBtn");
     const explainBtn = document.getElementById("explainBtn");
     const solutionBtn = document.getElementById("solutionBtn");
+    const runBtn = document.getElementById("runBtn");
+    const runResultBox = document.getElementById("runResultBox");
     const hintText = document.getElementById("hintText");
     const solutionBox = document.getElementById("solutionBox");
     const checklistBox = document.getElementById("checklistBox");
@@ -56,6 +58,8 @@
         pauseBtn,
         resumeBtn,
         finishBtn,
+        runBtn,
+        runResultBox,
         hintBtn,
         explainBtn,
         solutionBtn,

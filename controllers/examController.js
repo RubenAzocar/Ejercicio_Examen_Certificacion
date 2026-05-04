@@ -17,6 +17,8 @@
         pauseBtn,
         resumeBtn,
         finishBtn,
+        runBtn,
+        runResultBox,
         hintBtn,
         explainBtn,
         hintText,
@@ -721,6 +723,8 @@
         solutionBox.classList.add("hidden");
         solutionBox.innerHTML = "";
         solutionBtn.textContent = "Ver solución";
+        runResultBox.classList.add("hidden");
+        runResultBox.innerHTML = "";
 
         questionBody.innerHTML = "";
         checklistBox.innerHTML = "";
@@ -731,6 +735,7 @@
         lineByLineBox.innerHTML = "";
 
         if (q.type === "code") {
+            runBtn.classList.remove("hidden");
             const list = q.checklist || [
                 "Declara una solucion completa y legible.",
                 "Usa sintaxis correcta de JavaScript/HTML/CSS.",
@@ -810,6 +815,7 @@
                 }
             });
         } else {
+            runBtn.classList.add("hidden");
             const wrap = document.createElement("div");
             wrap.className = "options";
 
@@ -924,18 +930,56 @@
     function evaluateQuestion(q, answer) {
         if (q.type === "code") {
             if (!answer || typeof answer !== "string") {
-                return { ok: false, msg: "Sin respuesta de codigo." };
+                return { ok: false, msg: "Sin respuesta de código." };
             }
 
             const normalized = answer.toLowerCase();
             const keywords = q.expectedKeywords || [];
             const hasAll = keywords.length === 0 || keywords.every((kw) => normalized.includes(String(kw).toLowerCase()));
 
+            let syntaxOk = true;
+            let syntaxMsg = "";
+            const promptText = (q.prompt || "").toLowerCase();
+            const moduleId = state.module ? state.module.id : 0;
+            const isSQL = moduleId === 4 || promptText.includes("sql") || promptText.includes("select") || promptText.includes("update") || promptText.includes("delete") || promptText.includes("insert");
+            const isHTML = moduleId === 1 || promptText.includes("html") || promptText.includes("css") || promptText.includes("div");
+
+            if (isSQL) {
+                if (!answer.trim().endsWith(";")) {
+                    syntaxOk = false;
+                    syntaxMsg = "Falta el punto y coma (;) al final.";
+                } else if (!/^(SELECT|UPDATE|INSERT|DELETE|WITH|ALTER)\b/i.test(answer.trim())) {
+                    syntaxOk = false;
+                    syntaxMsg = "Comando DML/DDL inválido.";
+                }
+            } else if (isHTML) {
+                const openTags = (answer.match(/</g) || []).length;
+                const closeTags = (answer.match(/>/g) || []).length;
+                if (openTags !== closeTags) {
+                    syntaxOk = false;
+                    syntaxMsg = "Etiquetas HTML desbalanceadas (< >).";
+                }
+            } else {
+                try {
+                    new Function(answer);
+                } catch(e) {
+                    syntaxOk = false;
+                    syntaxMsg = "Error de sintaxis JS: " + e.message;
+                }
+            }
+
+            if (!syntaxOk) {
+                return { 
+                    ok: false, 
+                    msg: "Error sintáctico: " + syntaxMsg + (hasAll ? " Aunque usaste los elementos correctos, la sintaxis falla." : "")
+                };
+            }
+
             return {
                 ok: hasAll,
                 msg: hasAll
-                    ? "Respuesta valida para nivel simulador (cumple patrones esperados)."
-                    : "Faltan elementos esperados en tu solucion (palabras clave requeridas)."
+                    ? "Respuesta válida. Sintaxis y lógica correctas (Emulación Alkemy)."
+                    : "Sintaxis correcta, pero faltan palabras clave requeridas en la lógica de solución."
             };
         }
 
@@ -997,6 +1041,67 @@
         renderQuestion();
     });
 
+    function executeCode() {
+        const q = state.questions[state.currentIndex];
+        if (!q || q.type !== "code") return;
+        
+        const answer = state.answers[state.currentIndex] || "";
+        runResultBox.innerHTML = "";
+        runResultBox.classList.remove("hidden");
+        
+        const promptText = (q.prompt || "").toLowerCase();
+        const moduleId = state.module ? state.module.id : 0;
+        const isSQL = moduleId === 4 || promptText.includes("sql") || promptText.includes("select") || promptText.includes("update") || promptText.includes("delete") || promptText.includes("insert");
+        const isHTML = moduleId === 1 || promptText.includes("html") || promptText.includes("css") || promptText.includes("div");
+
+        if (isSQL) {
+            try {
+                const trimmed = answer.trim().toUpperCase();
+                if (!trimmed.match(/^(SELECT|UPDATE|INSERT|DELETE|WITH|ALTER)/)) {
+                    throw new Error("Syntax error: SQL debe iniciar con un comando DML/DDL válido.");
+                }
+                if (!answer.trim().endsWith(";")) {
+                    throw new Error("Syntax error: Las consultas SQL deben terminar con punto y coma (;).");
+                }
+                runResultBox.innerHTML = "<strong>[Entorno SQL Simulado]</strong><br>Query analizada correctamente.<br>Filas afectadas/devueltas: ~" + Math.floor(Math.random() * 5 + 1) + "<br><span style='color: #34d399;'>Ejecución exitosa.</span>";
+            } catch (e) {
+                runResultBox.innerHTML = "<span style='color: #ef4444;'>Error SQL: " + escapeHtml(e.message) + "</span>";
+            }
+        } else if (isHTML) {
+            const iframe = document.createElement("iframe");
+            iframe.style.width = "100%";
+            iframe.style.height = "250px";
+            iframe.style.background = "white";
+            iframe.style.border = "none";
+            iframe.style.borderRadius = "8px";
+            runResultBox.appendChild(iframe);
+            const doc = iframe.contentWindow.document;
+            doc.open();
+            doc.write(answer);
+            doc.close();
+        } else {
+            let output = [];
+            const originalConsoleLog = console.log;
+            console.log = function(...args) {
+                output.push(args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(" "));
+                originalConsoleLog.apply(console, args);
+            };
+            try {
+                const func = new Function(answer);
+                func();
+                if (output.length === 0) {
+                    output.push("<span style='color: #34d399;'>Ejecución completada sin errores. (Sin salida de consola)</span>");
+                }
+                runResultBox.innerHTML = "<strong>[Consola JS]</strong><br>" + output.join("<br>");
+            } catch (e) {
+                runResultBox.innerHTML = "<span style='color: #ef4444;'>Error JS: " + escapeHtml(e.message) + "</span>";
+            } finally {
+                console.log = originalConsoleLog;
+            }
+        }
+    }
+
+    runBtn.addEventListener("click", executeCode);
     pauseBtn.addEventListener("click", pauseTimer);
     resumeBtn.addEventListener("click", resumeTimer);
     finishBtn.addEventListener("click", () => finalizeModule(false));

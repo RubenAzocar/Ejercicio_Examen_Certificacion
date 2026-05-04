@@ -123,8 +123,8 @@ button, .btn {
 #hintBtn, #prevBtn, #explainBtn { background: rgba(255,255,255,0.1); color: white; }
 #hintBtn:hover, #prevBtn:hover { background: rgba(255,255,255,0.2); }
 
-#solutionBtn { background: var(--accent-success); color: white; }
-#solutionBtn:hover { background: #059669; }
+#solutionBtn, .btn-success { background: var(--accent-success); color: white; }
+#solutionBtn:hover, .btn-success:hover { background: #059669; }
 
 #pauseBtn { background: var(--accent-warning); color: white; }
 #finishBtn { background: var(--accent-danger); color: white; }
