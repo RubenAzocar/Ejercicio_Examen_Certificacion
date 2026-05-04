@@ -473,7 +473,7 @@
 
         return {
             type: "code",
-            prompt: "Escribe un bloque HTML + CSS para una " + c.name + " responsive de nivel junior. Usa una paleta " + theme + " y aplica buenas practicas semanticas.",
+            prompt: "Utilizando HTML y estilos, cree un bloque para una " + c.name + " responsive de nivel junior. Usa una paleta " + theme + " y aplica buenas practicas semanticas. Cumpla las siguientes condiciones:\n- " + c.hint,
             expectedKeywords: ["<", "</", "{"].concat(c.htmlKeywords).concat(c.cssKeywords),
             explanation: "Se evalua estructura HTML semantica, estilos CSS basicos y legibilidad del codigo.",
             hint: c.hint,
@@ -489,35 +489,35 @@
     function generateRandomSqlChallenge() {
         const challenges = [
             {
-                task: "Escribe una consulta que devuelva los 5 productos mas caros disponibles (con stock > 0), mostrando nombre y precio ordenado por precio descendente.",
+                task: "Con lenguaje SQL, escribe una consulta que devuelva los 5 productos mas caros disponibles (con stock > 0), mostrando nombre y precio ordenado por precio descendente.\n\nTabla disponible:\nproductos:\n- id (INT)\n- nombre (VARCHAR)\n- precio (DECIMAL)\n- stock (INT)",
                 expectedKeywords: ["SELECT", "FROM", "WHERE", "ORDER BY", "DESC", "LIMIT"]
             },
             {
-                task: "Crea una consulta que cuente cuantos usuarios hay por pais, devolviendo pais y cantidad, ordenado por cantidad descendente.",
+                task: "Con lenguaje SQL, crea una consulta que cuente cuantos usuarios hay por pais, devolviendo pais y cantidad, ordenado por cantidad descendente.\n\nTabla disponible:\nusuarios:\n- id (INT)\n- nombre (VARCHAR)\n- pais (VARCHAR)",
                 expectedKeywords: ["SELECT", "COUNT", "FROM", "GROUP BY", "ORDER BY", "DESC"]
             },
             {
-                task: "Escribe una consulta que encuentre usuarios (mostrando id y nombre) que hayan hecho mas de 3 ordenes. Une la tabla usuarios con ordenes.",
+                task: "Con lenguaje SQL, escribe una consulta que encuentre usuarios (mostrando id y nombre) que hayan hecho mas de 3 ordenes. Une la tabla usuarios con ordenes.\n\nTablas disponibles:\nusuarios:\n- id (INT)\n- nombre (VARCHAR)\n\nordenes:\n- id (INT)\n- id_usuario (INT)\n- fecha (DATE)",
                 expectedKeywords: ["SELECT", "FROM", "JOIN", "GROUP BY", "HAVING", "COUNT"]
             },
             {
-                task: "Obtén el promedio de calificacion por producto (mostrando id del producto y promedio), solo para productos con al menos 5 comentarios.",
+                task: "Con lenguaje SQL, obtén el promedio de calificacion por producto (mostrando id del producto y promedio), solo para productos con al menos 5 comentarios.\n\nTabla disponible:\ncomentarios:\n- id (INT)\n- id_producto (INT)\n- calificacion (DECIMAL)\n- texto (VARCHAR)",
                 expectedKeywords: ["SELECT", "FROM", "GROUP BY", "HAVING", "COUNT", "AVG"]
             },
             {
-                task: "Escribe una consulta INSERT que agregue un nuevo usuario a la tabla con nombre, email y pais especificados. Usa VALUES.",
+                task: "Con lenguaje SQL, escribe una consulta INSERT que agregue un nuevo usuario a la tabla con nombre, email y pais especificados. Usa VALUES.\n\nTabla disponible:\nusuarios:\n- id (INT)\n- nombre (VARCHAR)\n- email (VARCHAR)\n- pais (VARCHAR)",
                 expectedKeywords: ["INSERT", "INTO", "VALUES"]
             },
             {
-                task: "Crea un UPDATE que cambie el precio de un producto especifico (por id). Asegura que solo modifique ese producto.",
+                task: "Con lenguaje SQL, crea un UPDATE que cambie el precio de un producto especifico (por id). Asegura que solo modifique ese producto.\n\nTabla disponible:\nproductos:\n- id (INT)\n- nombre (VARCHAR)\n- precio (DECIMAL)",
                 expectedKeywords: ["UPDATE", "SET", "WHERE"]
             },
             {
-                task: "Escribe una consulta SQL que devuelva el nombre del producto y el total de unidades vendidas, filtrando los que superen 500 unidades. Usa un CTE (WITH).",
+                task: "Queremos conocer qué productos tienen un volumen de ventas destacado.\nEscribe una consulta SQL que devuelva el nombre del producto y el total de unidades vendidas, filtrando los que superen 500 unidades. Usa un CTE (WITH).\n\nTablas disponibles:\nproductos:\n- id (INT)\n- nombre (VARCHAR)\n\nventas:\n- id (INT)\n- id_producto (INT)\n- unidades (INT)",
                 expectedKeywords: ["WITH", "AS", "SELECT", "SUM", "GROUP BY", "HAVING"]
             },
             {
-                task: "Elimina todos los registros de la tabla Pedidos realizados antes del 1 de enero de 2023.",
+                task: "¿Como eliminarias todos los registros de la tabla Pedidos realizados antes del 1 de enero de 2023?\n\nTabla disponible:\nPedidos:\n- id_pedido (INT)\n- fecha (DATE)",
                 expectedKeywords: ["DELETE", "FROM", "WHERE", "<", "2023-01-01"]
             }
         ];
@@ -543,15 +543,15 @@
     function generateRandomJsLogicChallenge() {
         const scenarios = [
             {
-                task: "Escribe una funcion que reciba un array de ventas y retorne el total acumulado usando reduce.",
+                task: "Para resolver este ejercicio deberás utilizar JavaScript.\nTu equipo está desarrollando un sistema y necesita una función que reciba un array de ventas y retorne el total acumulado usando reduce.\nNo modifiques el nombre de la función ni la lógica que la evalúa.",
                 expectedKeywords: ["function", "reduce", "acc", "return"]
             },
             {
-                task: "Crea una funcion async que espere un segundo (setTimeout con Promise) y luego retorne 'Listo'.",
+                task: "Para resolver este ejercicio, deberás utilizar JavaScript.\nTu equipo está desarrollando un sistema asíncrono. Crea una función async que espere un segundo (setTimeout con Promise) y luego retorne 'Listo'.\nNo modifiques la sintaxis base que se provee en el editor.",
                 expectedKeywords: ["async", "Promise", "setTimeout", "await"]
             },
             {
-                task: "Implementa una funcion que filtre un array de usuarios por una propiedad 'activo: true'.",
+                task: "Para resolver este ejercicio, deberás utilizar JavaScript.\nTu equipo está desarrollando un filtro de base de datos. Implementa una función que filtre un array de usuarios por una propiedad 'activo: true'.\nAsegúrate de retornar el array filtrado.",
                 expectedKeywords: ["filter", "activo", "true", "return"]
             }
         ];
