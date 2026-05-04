@@ -1,0 +1,39 @@
+<nav class="barra">
+  <div class="navegacion">
+    <ul>
+      <li><a href="#">inicio</a></li>
+      <li><a href="#">secciones</a></li>
+      <li><a href="#">contacto</a></li>
+    </ul>
+  </div>
+</nav>
+
+<style>
+  /* Estilos BASE (desktop) */
+  nav {
+    background-color: green; /* Color de fondo de la barra de navegación */
+  }
+
+  .navegacion ul {
+    display: flex;        /* Coloca los elementos en fila (horizontal) */
+    gap: 2rem;            /* Espacio de 2rem entre cada elemento del menú */
+    list-style: none;     /* Elimina los puntos/viñetas de la lista */
+    max-width: 768px;     /* Limita el ancho máximo del menú a 768px */
+    margin: auto;         /* Centra el menú horizontalmente */
+    padding: 1rem;        /* Agrega espacio interno alrededor del menú */
+  }
+
+  nav a {
+    color: white;           /* Color del texto de los enlaces */
+    text-decoration: none;  /* Elimina el subrayado de los enlaces */
+  }
+
+  /* Estilos SOLO para móvil */
+  /* Se activan cuando el ancho de la pantalla es menor o igual a 768px */
+  @media(max-width: 768px) {
+    .navegacion ul {
+      flex-direction: column; /* Cambia la dirección de fila a columna (vertical) */
+      gap: 1rem;              /* Reduce el espacio entre elementos a 1rem en móvil */
+    }
+  }
+</style>

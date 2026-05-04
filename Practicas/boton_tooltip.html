@@ -1,0 +1,53 @@
+<button class="btn-tooltip" data-tooltip="click para enviar">Enviar</button>
+
+<style>
+  /* Estilos base del botón - Paleta cian y negro */
+  .btn-tooltip {
+    background: #00bcd4;     /* Cian */
+    color: black;             /* Texto negro */
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    position: relative;
+  }
+
+  /* INTERACTIVO: Cambia color al hover */
+  .btn-tooltip:hover {
+    background: #0097a7;     /* Cian más oscuro */
+  }
+
+  /* Tooltip que aparece al hover */
+  .btn-tooltip:hover::after {
+    content: attr(data-tooltip);  /* Toma el texto del atributo data-tooltip */
+    position: absolute;
+    bottom: 120%;                 /* Aparece arriba del botón */
+    left: 50%;
+    transform: translateX(-50%);
+    background: black;
+    color: #00bcd4;              /* Texto cian sobre fondo negro */
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  /* RESPONSIVE: Botón y tooltip se adaptan a móvil */
+  @media (max-width: 768px) {
+    .btn-tooltip {
+      padding: 12px 24px;
+      font-size: 1rem;
+      width: 100%;              /* Ocupa todo el ancho en móvil */
+      max-width: 300px;         /* Pero no crece demasiado */
+      display: block;
+      margin: 0 auto;           /* Centrado */
+    }
+
+    .btn-tooltip:hover::after {
+      font-size: 0.7rem;        /* Tooltip más pequeño en móvil */
+      white-space: normal;      /* Permite texto en varias líneas */
+      width: 150px;
+      text-align: center;
+    }
+  }
+</style>

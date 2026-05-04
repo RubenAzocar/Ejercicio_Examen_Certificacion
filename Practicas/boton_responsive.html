@@ -1,0 +1,39 @@
+<button id="miBoton" title="clickear">Enviar</button>
+
+<style>
+  /* Estilos base del botón */
+  button {
+    background: blue;
+    color: white;
+    border: none;
+    border-radius: 8px;      /* Bordes redondeados */
+    padding: 10px 20px;
+    cursor: pointer;          /* Manita al pasar el mouse */
+  }
+
+  /* INTERACTIVO: Cambia de color al pasar el cursor (hover) */
+  button:hover {
+    background: darkblue;
+  }
+
+  /* RESPONSIVE: Botón más grande en móvil */
+  @media (max-width: 768px) {
+    button {
+      padding: 12px 24px;
+      font-size: 1.1rem;
+    }
+  }
+</style>
+
+<script>
+  // INTERACTIVO: Función que se ejecuta al hacer click
+  function handleButton() {
+    alert('Botón clickeado');  // Acción del botón
+  }
+
+  // Seleccionar el botón del DOM
+  const boton = document.getElementById('miBoton');
+
+  // Asignar evento click para ejecutar handleButton
+  boton.addEventListener('click', handleButton);
+</script>
