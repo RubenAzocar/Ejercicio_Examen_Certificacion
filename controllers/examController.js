@@ -848,12 +848,14 @@
 
             renderCodeCoach(codeEditor.getValue(), q);
             updateProgressiveGuides(codeEditor.getValue(), q);
+            updateChecklistStatus(codeEditor.getValue());
 
             codeEditor.on("change", (instance) => {
                 const val = instance.getValue();
                 state.answers[state.currentIndex] = val;
                 renderCodeCoach(val, q);
                 updateProgressiveGuides(val, q);
+                updateChecklistStatus(val);
                 updateLearningMetrics();
             });
 
@@ -1020,73 +1022,120 @@
 
             const normalized = answer.toLowerCase();
             const keywords = q.expectedKeywords || [];
-            const hasAll = keywords.length === 0 || keywords.every((kw) => normalized.includes(String(kw).toLowerCase()));
+            const missingKeywords = keywords.filter(kw => !normalized.includes(String(kw).toLowerCase()));
+            const hasAll = missingKeywords.length === 0;
 
             let syntaxOk = true;
             let syntaxMsg = "";
             let semanticOk = true;
             let semanticMsg = "";
+            let bestPracticesOk = true;
+            let bestPracticesMsg = "";
 
             const promptText = (q.prompt || "").toLowerCase();
             const moduleId = state.module ? state.module.id : 0;
-            const isSQL = moduleId === 4 || promptText.includes("sql") || promptText.includes("select") || promptText.includes("update") || promptText.includes("delete") || promptText.includes("insert");
-            const isHTML = moduleId === 1 || promptText.includes("html") || promptText.includes("css") || promptText.includes("div");
+            
+            // Detección mejorada de lenguaje
+            const isSQL = moduleId === 4 || /\b(SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP|WITH)\b/i.test(answer);
+            const isJS = moduleId === 3 || /\b(function|const|let|var|if|for|while|return|=>)\b/.test(answer);
+            const isHTML = moduleId === 1 || /<[a-z][\s\S]*>/i.test(answer) || normalized.includes("class=") || normalized.includes("id=");
 
             if (isSQL) {
+                // Sintaxis SQL
                 if (!answer.trim().endsWith(";")) {
                     syntaxOk = false;
-                    syntaxMsg = "Falta el punto y coma (;) al final.";
-                } else if (!/^(SELECT|UPDATE|INSERT|DELETE|WITH|ALTER)\b/i.test(answer.trim())) {
-                    syntaxOk = false;
-                    syntaxMsg = "Comando DML/DDL inválido o mal estructurado.";
+                    syntaxMsg = "Falta el punto y coma (;) al final de la consulta.";
                 }
-                // Práctica semántica SQL: uso de alias si hay JOIN
+                if (/\bSELECT\b/i.test(answer) && !/\bFROM\b/i.test(answer)) {
+                    syntaxOk = false;
+                    syntaxMsg = "Consulta SELECT mal formada: Falta la cláusula FROM.";
+                }
+                if (/\bUPDATE\b/i.test(answer) && !/\bSET\b/i.test(answer)) {
+                    syntaxOk = false;
+                    syntaxMsg = "Consulta UPDATE mal formada: Falta la cláusula SET.";
+                }
+                
+                // Buenas prácticas SQL
+                if (/\b(DELETE|UPDATE)\b/i.test(answer) && !/\bWHERE\b/i.test(answer)) {
+                    bestPracticesOk = false;
+                    bestPracticesMsg = "¡CUIDADO! Estás ejecutando un " + (answer.toUpperCase().includes("DELETE") ? "DELETE" : "UPDATE") + " sin cláusula WHERE. Esto afectaría a toda la tabla.";
+                }
                 if (normalized.includes("join") && !normalized.includes(" as ") && !/\w+\s+\w+/.test(normalized.split("join")[1])) {
                     semanticOk = false;
-                    semanticMsg = "Buenas prácticas: Se recomienda usar alias claros para las tablas al hacer JOIN.";
+                    semanticMsg = "Se recomienda usar alias ('AS' o espacio) para mejorar la legibilidad en consultas con JOIN.";
                 }
-            } else if (isHTML) {
-                const openTags = (answer.match(/</g) || []).length;
-                const closeTags = (answer.match(/>/g) || []).length;
-                if (openTags !== closeTags) {
-                    syntaxOk = false;
-                    syntaxMsg = "Etiquetas HTML desbalanceadas.";
+            } else if (isHTML || isJS) {
+                // Si contiene etiquetas HTML, tratamos como HTML/CSS
+                if (/<[a-z][\s\S]*>/i.test(answer)) {
+                    // Balance de etiquetas básico
+                    const openTags = (answer.match(/<[a-zA-Z1-6]+/g) || []);
+                    const closeTags = (answer.match(/<\/[a-zA-Z1-6]+/g) || []);
+                    if (openTags.length !== closeTags.length) {
+                        syntaxOk = false;
+                        syntaxMsg = "Etiquetas HTML desbalanceadas o mal cerradas.";
+                    }
+
+                    // Semántica HTML
+                    const semanticTags = ["header", "footer", "main", "nav", "section", "article", "aside"];
+                    const usedSemantic = semanticTags.some(t => normalized.includes("<" + t));
+                    if ((promptText.includes("semántica") || promptText.includes("junior")) && !usedSemantic) {
+                        semanticOk = false;
+                        semanticMsg = "Usa etiquetas semánticas (header, main, section, etc.) en lugar de solo <div> para estructurar el contenido.";
+                    }
+
+                    // Accesibilidad
+                    if (normalized.includes("<img") && !normalized.includes("alt=")) {
+                        bestPracticesOk = false;
+                        bestPracticesMsg = "Accesibilidad: Las etiquetas <img> deben incluir siempre el atributo 'alt' para lectores de pantalla.";
+                    }
                 }
-                // Práctica semántica HTML
-                if (promptText.includes("semántica") && !/<\s*(main|header|footer|section|article|nav)\b/i.test(answer)) {
-                    semanticOk = false;
-                    semanticMsg = "Semántica: El ejercicio pide etiquetas semánticas y usaste etiquetas genéricas (como div).";
+
+                // CSS si hay llaves
+                if (answer.includes("{") && answer.includes("}")) {
+                    if (promptText.includes("responsivo") || promptText.includes("móvil")) {
+                        if (normalized.includes("font-size") && normalized.includes("px")) {
+                            bestPracticesOk = false;
+                            bestPracticesMsg = "Buenas prácticas: Usa unidades relativas (rem, em) para tamaños de fuente en diseños responsivos.";
+                        }
+                    }
                 }
-                // Práctica CSS: rem vs px
-                if (promptText.includes("responsivo") && normalized.includes("font-size") && !normalized.includes("rem") && !normalized.includes("em")) {
-                    semanticOk = false;
-                    semanticMsg = "Buenas prácticas: Para fuentes responsivas, prefiere 'rem' o 'em' sobre 'px' para mejorar la accesibilidad.";
-                }
-            } else {
-                try {
-                    // Evaluación lógica básica para JS: Intentar instanciar
-                    new Function(answer);
-                } catch(e) {
-                    syntaxOk = false;
-                    syntaxMsg = "Error de sintaxis JS: " + e.message;
+
+                // JavaScript puro o dentro de script
+                if (isJS) {
+                    try {
+                        new Function(answer.replace(/<script>|<\/script>/gi, ""));
+                    } catch(e) {
+                        syntaxOk = false;
+                        syntaxMsg = "Error de sintaxis en el código lógico: " + e.message;
+                    }
+
+                    if (normalized.includes("var ")) {
+                        bestPracticesOk = false;
+                        bestPracticesMsg = "Modernización: Se recomienda usar 'let' o 'const' en lugar de 'var' para un mejor manejo del scope.";
+                    }
+                    if (normalized.includes("==") && !normalized.includes("===") && !normalized.includes("!=") && !normalized.includes("!==")) {
+                        bestPracticesOk = false;
+                        bestPracticesMsg = "Seguridad: Prefiere el operador de igualdad estricta (===) para evitar coerciones de tipo inesperadas.";
+                    }
                 }
             }
 
             if (!syntaxOk) {
-                return { ok: false, msg: "Error sintáctico: " + syntaxMsg };
+                return { ok: false, msg: "⛔ Error Sintáctico: " + syntaxMsg };
             }
 
             if (!hasAll) {
-                return { ok: false, msg: "Lógica incompleta: Faltan elementos clave requeridos por el enunciado." };
+                return { ok: false, msg: "⚠️ Lógica Incompleta: Faltan elementos requeridos (" + missingKeywords.join(", ") + ")." };
             }
 
-            if (!semanticOk) {
-                return { ok: true, msg: "Válido, pero con advertencia: " + semanticMsg };
+            if (!semanticOk || !bestPracticesOk) {
+                const combinedMsg = [semanticMsg, bestPracticesMsg].filter(m => m).join(" | ");
+                return { ok: true, msg: "💡 Válido con sugerencias: " + combinedMsg };
             }
 
             return {
                 ok: true,
-                msg: "¡Excelente! Sintaxis, lógica y buenas prácticas validadas correctamente."
+                msg: "✅ ¡Excelente! Código válido, semántico y siguiendo las mejores prácticas."
             };
         }
 
@@ -1095,6 +1144,43 @@
             ok,
             msg: ok ? "Opción correcta." : "Opción incorrecta."
         };
+    }
+
+    function updateChecklistStatus(code) {
+        const items = checklistBox.querySelectorAll("li");
+        const normalized = code.toLowerCase();
+        
+        items.forEach(li => {
+            const text = li.textContent.toLowerCase();
+            let met = false;
+            
+            // Lógica heurística para marcar checklist
+            if (text.includes("semántica") || text.includes("etiqueta")) {
+                met = /<(main|header|footer|section|article|nav|aside|figure)\b/i.test(code);
+            } else if (text.includes("rem") || text.includes("em") || text.includes("relativa")) {
+                met = normalized.includes("rem") || normalized.includes("em");
+            } else if (text.includes("alt")) {
+                met = normalized.includes("alt=");
+            } else if (text.includes("clase") || text.includes("class")) {
+                met = normalized.includes("class=");
+            } else if (text.includes("select") || text.includes("from")) {
+                met = /\bselect\b/i.test(code) && /\bfrom\b/i.test(code);
+            } else if (text.includes("where")) {
+                met = /\bwhere\b/i.test(code);
+            } else if (text.includes("const") || text.includes("let")) {
+                met = /\b(const|let)\b/.test(code);
+            }
+            
+            if (met) {
+                li.style.color = "var(--accent-success)";
+                li.style.textDecoration = "line-through";
+                li.style.opacity = "0.7";
+            } else {
+                li.style.color = "var(--text-muted)";
+                li.style.textDecoration = "none";
+                li.style.opacity = "1";
+            }
+        });
     }
 
     function finalizeModule(auto = false) {
