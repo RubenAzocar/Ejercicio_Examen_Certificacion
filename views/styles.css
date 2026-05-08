@@ -246,9 +246,31 @@ select {
 .kid-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 0.75rem;
     margin-bottom: 0.5rem;
     color: #92400e;
+}
+
+.btn-toggle-kid {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    background: #92400e;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-toggle-kid:hover {
+    background: #78350f;
+    transform: scale(1.05);
+}
+
+.btn-toggle-kid.active {
+    background: #f59e0b;
+    color: #451a03;
 }
 
 .kid-icon {

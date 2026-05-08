@@ -751,12 +751,26 @@
             kidBox.className = "kid-explanation-box";
             kidBox.innerHTML = `
                 <div class="kid-header">
-                    <span class="kid-icon">👶</span>
-                    <strong>Explicación simple (Nivel 10 años)</strong>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span class="kid-icon">👶</span>
+                        <strong>Explicación simple (Nivel 10 años)</strong>
+                    </div>
+                    <button class="btn-toggle-kid" id="toggleKidBtn">Ver explicación</button>
                 </div>
-                <p>${q.kidExplanation}</p>
+                <p id="kidExplanationText" class="hidden">${q.kidExplanation}</p>
             `;
+            
             stickyHeader.appendChild(kidBox);
+
+            // Listener para el botón de toggle
+            const toggleBtn = kidBox.querySelector("#toggleKidBtn");
+            const kidText = kidBox.querySelector("#kidExplanationText");
+            
+            toggleBtn.addEventListener("click", () => {
+                const isHidden = kidText.classList.toggle("hidden");
+                toggleBtn.textContent = isHidden ? "Ver explicación" : "Ocultar explicación";
+                toggleBtn.classList.toggle("active", !isHidden);
+            });
         }
 
         questionBody.appendChild(stickyHeader);
