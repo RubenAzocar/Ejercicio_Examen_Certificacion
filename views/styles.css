@@ -141,13 +141,12 @@ button, .btn {
 /* Question Content */
 .exam-header-sticky {
     position: sticky;
-    top: -30px; /* Compensa el padding del card */
+    top: 0;
     z-index: 100;
     background: var(--card-bg);
-    padding: 20px 0;
-    margin: -20px 0 25px 0;
+    padding: 15px 0;
+    margin-bottom: 20px;
     border-bottom: 1px solid var(--border);
-    background: var(--card-bg);
     backdrop-filter: blur(10px);
 }
 
@@ -236,13 +235,15 @@ select {
 
 /* Kid Explanation Box */
 .kid-explanation-box {
-    background: linear-gradient(135deg, rgba(254, 249, 195, 0.9) 0%, rgba(254, 243, 199, 0.9) 100%);
+    background: linear-gradient(135deg, rgba(254, 249, 195, 0.95) 0%, rgba(254, 243, 199, 0.95) 100%);
     border-left: 5px solid #f59e0b;
-    padding: 1rem;
+    padding: 1.25rem;
     border-radius: 12px;
-    margin-top: 15px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    animation: slideIn 0.5s ease-out;
+    margin: 10px 0 20px 0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    animation: slideIn 0.4s ease-out;
+    position: relative;
+    z-index: 1;
 }
 
 .kid-header {
