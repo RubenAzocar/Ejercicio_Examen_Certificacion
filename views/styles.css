@@ -235,12 +235,12 @@ select {
 
 /* Kid Explanation Box */
 .kid-explanation-box {
-    background: linear-gradient(135deg, rgba(254, 249, 195, 0.95) 0%, rgba(254, 243, 199, 0.95) 100%);
-    border-left: 5px solid #f59e0b;
-    padding: 1.25rem;
-    border-radius: 12px;
-    margin: 10px 0 20px 0;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-left: 6px solid #d97706;
+    padding: 1.5rem;
+    border-radius: 14px;
+    margin: 15px 0 25px 0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     animation: slideIn 0.4s ease-out;
     position: relative;
     z-index: 1;
@@ -250,19 +250,24 @@ select {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-bottom: 0.5rem;
-    color: #92400e;
+    margin-bottom: 0.75rem;
+    color: #78350f; /* Marrón muy oscuro para contraste alto */
+}
+
+.kid-header strong {
+    font-size: 1.1rem;
+    font-weight: 800;
 }
 
 .btn-kid {
-    background: #fef9c3 !important;
-    color: #92400e !important;
-    border: 1px solid #f59e0b !important;
+    background: #fef3c7 !important;
+    color: #451a03 !important; /* Texto muy oscuro */
+    border: 2px solid #d97706 !important;
 }
 
 .btn-kid:hover {
-    background: #fef3c7 !important;
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+    background: #fde68a !important;
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
 }
 
 .kid-icon {
@@ -271,10 +276,15 @@ select {
 
 .kid-explanation-box p {
     margin: 0;
-    color: #78350f;
-    font-size: 0.95rem;
-    line-height: 1.5;
+    color: #451a03; /* Casi negro-marrón para máxima legibilidad */
+    font-size: 1.05rem;
+    line-height: 1.6;
     font-weight: 500;
+}
+
+.kid-explanation-box strong {
+    color: #92400e;
+    font-weight: 700;
 }
 
 @keyframes slideIn {
