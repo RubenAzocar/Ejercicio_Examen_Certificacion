@@ -10,96 +10,111 @@
         { id: 7, name: "API Backend Node Express (REST, JWT, Seguridad)", type: "Seleccion Multiple", count: 10, minutes: 15 }
     ];
 
-    // Banco de preguntas expandido con contenido de preguntas_certificacion.txt
+    // Banco de preguntas expandido
     const BASE_QUESTION_BANK = {
         1: [
-            { type: "single", prompt: "¿Cuál de las siguientes técnicas es fundamental para adaptar el contenido de un sitio web a diferentes tamaños de pantalla?", options: ["Aplicar únicamente etiquetas <meta> sin ajustes en CSS", "Uso exclusivo de imágenes PNG", "Utilizar position: fixed en todos los elementos", "Uso de @media queries para ajustar estilos según el viewport"], answer: 3, explanation: "Las Media Queries son la base del Responsive Web Design." },
-            { type: "single", prompt: "¿Cuál de las siguientes unidades de medida es más adecuada para establecer el tamaño de fuente en diseños responsivos?", options: ["Porcentaje (%)", "Centímetros (cm)", "rem", "em", "Píxeles (px)"], answer: 2, explanation: "rem es ideal ya que escala respecto al tamaño de fuente raíz del documento." },
-            { type: "code", prompt: "Escribe la sintaxis (media query) correcta para aplicar estilos a dispositivos con un ancho máximo de 768px.", expectedKeywords: ["@media", "max-width", "768px"], explanation: "max-width define el límite superior para aplicar los estilos.", solutionCode: "@media (max-width: 768px) {\n  /* Estilos aquí */\n}" },
-            { type: "single", prompt: "¿Para qué sirve principalmente Git?", options: ["Para controlar versiones del código fuente", "Para automatizar pruebas de software", "Para compilar códigos en múltiples lenguajes", "Para diseñar interfaces gráficas"], answer: 0, explanation: "Git es un sistema de control de versiones distribuido." },
-            { type: "code", prompt: "Escribe el comando que se utiliza para agregar todos los cambios al área de preparación (staging area) en Git.", expectedKeywords: ["git", "add"], explanation: "git add prepara los archivos para el siguiente commit.", solutionCode: "git add ." },
-            { type: "single", prompt: "¿Cuál es la principal diferencia entre 'git rebase' y 'git merge'?", options: ["Rebase reescribe el historial para mostrar una línea lineal, mientras que merge conserva el historial de ramas", "Merge reescribe el historial completo del repositorio", "Rebase fusiona ramas sin crear commits", "Rebase elimina automáticamente las ramas fusionadas"], answer: 0, explanation: "Rebase mueve o combina una secuencia de commits a una nueva base." },
-            { type: "code", prompt: "Utilizando HTML, cree un contenedor (div) que incluya un encabezado (h1) con el texto \"Bienvenidos\". El contenido debe estar centrado tanto vertical como horizontalmente, con fondo color celeste (#87CEEB) y texto en color blanco.", expectedKeywords: ["div", "h1", "display", "flex", "center", "#87ceeb", "color"], explanation: "Se espera uso de Flexbox o Grid para centrado y estilos de color.", solutionCode: "<div style=\"display: flex; justify-content: center; align-items: center; height: 100vh; background: #87CEEB; color: white;\">\n  <h1>Bienvenidos</h1>\n</div>" },
-            { type: "code", prompt: "Utilizando HTML y estilos, cree un boton con la etiqueta \"enviar\" que cumpla las siguientes condiciones:\n- cambia color al pasar el cursor sobre el\n- presenta bordes redondeados\n- ejecuta la funcion handleButton al hacer click (no es necesario definir funcion)\n- al posicionar el cursor sobre boton, debe mostrarse un texto emergente (tooltip) con el mensaje \"clickear\".", expectedKeywords: ["button", "onclick", "handleButton", "hover", "border-radius", "title"], explanation: "Se evalúa uso de atributos de evento y pseudo-clases CSS.", solutionCode: "<button onclick=\"handleButton()\" title=\"clickear\" class=\"btn\">Enviar</button>\n<style>\n.btn {\n  border-radius: 8px;\n  transition: background 0.3s;\n}\n.btn:hover {\n  background: blue;\n}\n</style>" }
+            { 
+                type: "single", 
+                prompt: "¿Cuál de las siguientes técnicas es fundamental para adaptar el contenido de un sitio web a diferentes tamaños de pantalla?", 
+                options: ["Aplicar únicamente etiquetas <meta> sin ajustes en CSS", "Uso exclusivo de imágenes PNG", "Utilizar position: fixed en todos los elementos", "Uso de @media queries para ajustar estilos según el viewport"], 
+                answer: 3, 
+                explanation: "Las Media Queries son la base del Responsive Web Design.",
+                kidExplanation: "Imagina que tu página web es como plastilina: con las 'media queries' le dices cómo cambiar de forma para que quepa bien en un teléfono pequeño o en una tele gigante."
+            },
+            { 
+                type: "single", 
+                prompt: "¿Cuál de las siguientes unidades de medida es más adecuada para establecer el tamaño de fuente en diseños responsivos?", 
+                options: ["Porcentaje (%)", "Centímetros (cm)", "rem", "em", "Píxeles (px)"], 
+                answer: 2, 
+                explanation: "rem es ideal ya que escala respecto al tamaño de fuente raíz.",
+                kidExplanation: "El 'rem' es como una regla mágica: si cambias el tamaño de la letra de toda la casa, todas las habitaciones se ajustan solitas usando esa misma medida."
+            },
+            {
+                type: "single",
+                prompt: "¿Qué etiqueta HTML se usa para definir el contenido principal de un documento?",
+                options: ["<header>", "<main>", "<section>", "<div>"],
+                answer: 1,
+                explanation: "<main> indica el contenido central y único de la página.",
+                kidExplanation: "La etiqueta <main> es como el plato principal de tu cena: es lo más importante y lo que todos vinieron a ver."
+            },
+            {
+                type: "single",
+                prompt: "¿Qué propiedad CSS se utiliza para cambiar el color de fondo?",
+                options: ["color", "background-color", "bgcolor", "fill"],
+                answer: 1,
+                explanation: "background-color define el color del lienzo detrás del contenido.",
+                kidExplanation: "Es como elegir el color de la pared de tu cuarto antes de empezar a colgar posters."
+            },
+            {
+                type: "code",
+                prompt: "Crea una regla CSS que use una Media Query para dispositivos de menos de 600px y cambie el color de fondo a rojo.",
+                expectedKeywords: ["@media", "max-width", "600px", "background-color", "red"],
+                explanation: "Las media queries permiten diseño adaptativo.",
+                kidExplanation: "Vamos a decirle a la computadora: '¡Oye! Si la pantalla es más pequeña que un cuaderno, pinta el fondo de color rojo'.",
+                solutionCode: "@media (max-width: 600px) {\n  body {\n    background-color: red;\n  }\n}"
+            }
         ],
         2: [
-            { type: "code", prompt: "Para resolver este ejercicio debera utilizar JavaScript\ntu equipo esta desarrollando un sistema para registrar temperaturas diarias y calcular estadisticas, pero el codigo esta incompleto.\ntu tarea es completar el calculo de la temperatura maxima, minima y el promedio semanal.\nescribir el codigo a partir del comentario indicado dentro del bucle, no borres el comentario ni modifiques el resto del codigo:\n\nfunction analizarTemperaturas(temperaturas) {\n  if (temperaturas.length === 0) { return { promedio: null, maxima: null, minima: null }; }\n  let suma = 0;\n  let minima = temperaturas[0];\n  let maxima = temperaturas[0];\n  for (let temp of temperaturas) {\n    suma += temp;\n    // escribe tu codigo aqui //\n  }\n  const promedio = suma / temperaturas.length;\n  return { promedio, maxima, minima };\n}", expectedKeywords: ["if", "temp", ">", "maxima", "<", "minima"], explanation: "Lógica básica de comparación y acumulación.", solutionCode: "for(let temp of temperaturas) {\n  suma += temp;\n  if (temp > maxima) maxima = temp;\n  if (temp < minima) minima = temp;\n}" },
-            { type: "code", prompt: "Para resolver este ejercicio, deberas utilizar JavaScript\nTu equipo esta desarrollando una funcion que recibe un string y devuleve las palabras que tengan alguna coincidencia con el string recibido, pero el mismo esta incompleto.\ntu tarea es completar el codigo a partir del comentario indicado dentro de la funcion. Considera que la funcion no tiene que diferenciar entre mayusculas y minusculas.\nNo borres el comentario ni modifiques el resto del codigo:\n\nasync function filtrarPalabras(palabra) {\n  const palabrasTotal = await getWords();\n  if (palabra.length < 3) { return palabrasTotal; }\n  // escribe aqui tu codigo //\n}", expectedKeywords: ["async", "await", "filter", "includes", "toLowerCase"], explanation: "Uso de métodos de array y normalización de texto.", solutionCode: "return palabrasTotal.filter(w => w.toLowerCase().includes(palabra.toLowerCase()));" },
-            { type: "single", prompt: "¿Qué devuelve map en JavaScript?", options: ["Un valor único", "Un nuevo array transformado", "El mismo array sin cambios", "Un objeto"], answer: 1, explanation: "map retorna una nueva colección con los resultados del callback." },
-            { type: "single", prompt: "¿Cuál es la mejor forma de declarar una constante que no cambiará?", options: ["var", "let", "const", "define"], answer: 2, explanation: "const es para valores inmutables por referencia." },
-            { type: "code", prompt: "Escribe una función que cuente cuántas vocales tiene un texto.", expectedKeywords: ["for", "includes", "vocales", "count"], explanation: "Recorrido y validación de caracteres.", solutionCode: "function countVocals(text) {\n  const vocales = 'aeiouAEIOU';\n  let count = 0;\n  for(let char of text) {\n    if(vocales.includes(char)) count++;\n  }\n  return count;\n}" }
-        ],
-        3: [
-            { type: "single", prompt: "En JavaScript, ¿cómo se define una clase utilizando la sintaxis moderna ES6?", options: ["let MiClase = class {}", "define Class MiClase {}", "class MiClase {}", "function MiClase() {}"], answer: 2, explanation: "La palabra reservada 'class' es el estándar de ES6." },
-            { type: "single", prompt: "¿Qué palabra clave en JavaScript se usa para permitir que una clase herede de otra?", options: ["implements", "extends", "prototype", "inherits"], answer: 1, explanation: "extends establece el vínculo de herencia entre clases." },
-            { type: "single", prompt: "¿Qué sucede cuando una subclase en JavaScript redefine una propiedad del constructor de su clase padre?", options: ["La nueva propiedad reemplaza la de la clase padre en la instancia", "La propiedad queda como undefined", "Se genera un error", "Ambas coexisten"], answer: 0, explanation: "Se sobreescribe el valor en la instancia de la subclase." },
-            { type: "single", prompt: "¿Cuál de las siguientes palabras clave se introdujo en ES6 para declarar variables con ámbito de bloque?", options: ["var", "const", "let", "static"], answer: 2, explanation: "let y const tienen scope de bloque (entre llaves)." },
-            { type: "single", prompt: "¿Cuál es la principal ventaja de usar desestructuración de objetos en JavaScript ES6?", options: ["Mejora el rendimiento", "No tiene ninguna ventaja real", "Modifica el objeto original", "Permite extraer valores de forma más concisa"], answer: 3, explanation: "Simplifica la sintaxis al asignar propiedades a variables." },
-            { type: "single", prompt: "En un manejador de eventos tradicional, ¿a qué hace referencia 'this'?", options: ["Al botón que disparó el evento", "Al evento en sí", "Al objeto window", "A null"], answer: 0, explanation: "this apunta al elemento que recibió el evento (currenttarget)." },
-            { type: "single", prompt: "¿Qué efecto tiene el método stopPropagation()?", options: ["Reinicia la propagación", "Cancela el evento por completo", "Impide que el evento se propague a elementos padres", "Detiene el callback"], answer: 2, explanation: "Evita el 'bubbling' del evento hacia arriba en el DOM." },
-            { type: "single", prompt: "¿Qué palabra clave se usa para definir una función asincrónica?", options: ["fetch", "await", "promise", "async"], answer: 3, explanation: "async marca la función para retornar una promesa." },
-            { type: "single", prompt: "¿Qué función cumple el método .finally() en una cadena de promesas?", options: ["Se ejecuta solo si hay éxito", "Evita propagar errores", "Se ejecuta siempre, independientemente del resultado", "Captura errores no manejados"], answer: 2, explanation: "Útil para limpieza de recursos (cerrar loaders, conexiones, etc.)." },
-            { type: "single", prompt: "¿Cuál es la diferencia entre Promise.allSettled() y Promise.all()?", options: ["allSettled devuelve siempre éxito", "allSettled espera a que todas terminen (resueltas o rechazadas), all falla si una se rechaza", "all espera rechazos", "Funcionan igual"], answer: 1, explanation: "allSettled garantiza tener el estado de cada promesa sin abortar el conjunto." },
-            { type: "code", prompt: "Escribe una función async que consulte /api/users con fetch y retorne el JSON.", expectedKeywords: ["async", "await", "fetch", "json"], explanation: "Se espera manejo de asincronía básica.", solutionCode: "async function getUsers() {\n  try {\n    const response = await fetch('/api/users');\n    const data = await response.json();\n    return data;\n  } catch (error) {\n    console.error(error);\n  }\n}" },
-            { type: "code", prompt: "Implementa debounce(fn, delay) para limitar llamadas frecuentes.", expectedKeywords: ["setTimeout", "clearTimeout", "return"], explanation: "Patrón avanzado de optimización de eventos.", solutionCode: "function debounce(fn, delay) {\n  let timeoutId;\n  return function(...args) {\n    clearTimeout(timeoutId);\n    timeoutId = setTimeout(() => {\n      fn.apply(this, args);\n    }, delay);\n  };\n}" },
-            { type: "code", prompt: "Crea una función que agrupe un array de objetos por categoría usando reduce.", expectedKeywords: ["reduce", "acc", "categoria"], explanation: "Transformación compleja de datos con reduce.", solutionCode: "function agruparPorCategoria(items) {\n  return items.reduce((acc, item) => {\n    if (!acc[item.categoria]) {\n      acc[item.categoria] = [];\n    }\n    acc[item.categoria].push(item);\n    return acc;\n  }, {});\n}" },
-            { type: "single", prompt: "¿Qué ocurre si se utiliza try...catch en una función async, pero el rechazo no se maneja dentro del try?", options: ["Error de compilación", "El error se propaga y puede capturarse fuera", "Se ignora", "Retorna true"], answer: 1, explanation: "Si el await falla fuera del try, la promesa de la función async se rechaza." },
-            { type: "single", prompt: "¿Cual es la salida de typeof null?", options: ["null", "object", "undefined", "string"], answer: 1, explanation: "Es un bug histórico de JS que se mantuvo por compatibilidad." }
+            { 
+                type: "single", 
+                prompt: "¿Qué devuelve typeof [] en JavaScript?", 
+                options: ["array", "object", "list", "undefined"], 
+                answer: 1, 
+                explanation: "En JS, los arrays son técnicamente objetos.",
+                kidExplanation: "En JavaScript, una lista de cosas es como una caja de juguetes. Si le preguntas qué es, te dirá que es un 'objeto' (una caja), aunque por dentro tenga muchos carritos."
+            },
+            {
+                type: "single",
+                prompt: "¿Cuál es el resultado de 2 + '2' en JavaScript?",
+                options: ["4", "22", "NaN", "Error"],
+                answer: 1,
+                explanation: "JS concatena cuando uno de los operandos es un string.",
+                kidExplanation: "Si tratas de sumar el número 2 con el dibujo del número 2, JavaScript los pega como si fueran calcomanías y sale '22'."
+            },
+            {
+                type: "code",
+                prompt: "Escribe una función llamada 'saludar' que reciba un nombre y devuelva 'Hola ' + nombre.",
+                expectedKeywords: ["function", "saludar", "return", "Hola"],
+                explanation: "Definición básica de funciones y retorno de strings.",
+                kidExplanation: "Crea un robot llamado 'saludar' que cuando le digas un nombre, te responda con un saludo amable.",
+                solutionCode: "function saludar(nombre) {\n  return 'Hola ' + nombre;\n}"
+            }
         ],
         4: [
-            { type: "code", prompt: "¿Como eliminarias un registro especifico con id_cliente = 5 en la tabla 'clientes' en SQL?\n\nTabla disponible:\nclientes:\n- id_cliente (INT)\n- nombre (VARCHAR)\n- telefono (VARCHAR)", expectedKeywords: ["DELETE", "FROM", "clientes", "WHERE", "id_cliente", "5"], explanation: "DELETE FROM es la sintaxis estándar de DML.", solutionCode: "DELETE FROM clientes WHERE id_cliente = 5;" },
-            { type: "code", prompt: "¿Como cambiarias el tipo de dato de la columna telefono en la tabla Clientes a VARCHAR(20)?\n\nTabla disponible:\nclientes:\n- id_cliente (INT)\n- nombre (VARCHAR)\n- telefono (INT)", expectedKeywords: ["ALTER", "TABLE", "clientes", "MODIFY", "telefono", "VARCHAR(20)"], explanation: "ALTER TABLE permite modificar la definición de columnas.", solutionCode: "ALTER TABLE clientes MODIFY telefono VARCHAR(20);" },
-            { type: "code", prompt: "¿Como cambiar el nombre de la tabla Empleados a Personal?\n\nTabla disponible:\nEmpleados:\n- id_empleado (INT)\n- nombre (VARCHAR)", expectedKeywords: ["ALTER", "TABLE", "Empleados", "RENAME", "TO", "Personal"], explanation: "RENAME TO es la cláusula para renombrar objetos en SQL.", solutionCode: "ALTER TABLE Empleados RENAME TO Personal;" },
-            { type: "single", prompt: "¿Qué cláusula permite restringir que el campo edad esté entre 18 y 65?", options: ["CHECK (edad >= 18 AND edad <= 65)", "CONSTRAIN edad", "LIMIT 18, 65", "WHERE edad BETWEEN"], answer: 0, explanation: "CHECK define restricciones de integridad de dominio." },
-            { type: "single", prompt: "¿Qué elemento del modelo ER representa a un paciente con DNI y fecha de nacimiento?", options: ["Una relación", "Una entidad", "Un atributo multivaluado", "Un índice"], answer: 1, explanation: "Una entidad representa un objeto con existencia propia y atributos." },
-            { type: "single", prompt: "¿Cómo se representa una clave foránea en un modelo Entidad-Relación?", options: ["Con un círculo", "Con un rombo", "Con una línea de relación que conecta entidades", "Con una flecha"], answer: 2, explanation: "Las relaciones conectan entidades y establecen el flujo de llaves." },
-            { type: "single", prompt: "¿Qué nivel de aislamiento puede causar que se sobrescriban actualizaciones simultáneas?", options: ["SERIALIZABLE", "READ COMMITTED", "SNAPSHOT", "READ UNCOMMITTED"], answer: 1, explanation: "READ COMMITTED puede sufrir de Lost Updates si no se usa bloqueo pesimista/optimista." },
-            { type: "code", prompt: "Escribe una consulta en SQL que devuelva los nombres de los 3 productos más vendidos (por cantidad total) ordenados de mayor a menor. Solo debe mostrarse el nombre del producto y la cantidad total vendida.\n\nTablas disponibles:\nproducts:\n- id (INT)\n- name (VARCHAR)\n- category (VARCHAR)\n\norder_items:\n- id (INT)\n- order_id (INT)\n- product_id (INT)\n- quantity (INT)", expectedKeywords: ["SELECT", "FROM", "GROUP BY", "ORDER BY", "DESC", "LIMIT"], explanation: "Uso de agregaciones y ordenamiento.", solutionCode: "SELECT p.name, SUM(oi.quantity) as total_vendida\nFROM products p\nJOIN order_items oi ON p.id = oi.product_id\nGROUP BY p.name\nORDER BY total_vendida DESC\nLIMIT 3;" },
-            { type: "code", prompt: "Con lenguaje SQL, completa la siguiente consulta para obtener todos los productos cuyo precio sea mayor a 100 y estado activo o precio menor a 50 y estado inactivo.\n\nTable disponible:\nproductos:\n- id (INT)\n- nombre (VARCHAR)\n- estado (VARCHAR)\n- precio (INT)", expectedKeywords: ["SELECT", "WHERE", "AND", "OR"], explanation: "Uso de operadores lógicos.", solutionCode: "SELECT * FROM productos\nWHERE (precio > 100 AND estado = 'activo')\n   OR (precio < 50 AND estado = 'inactivo');" },
-            { type: "code", prompt: "Queremos conocer qué productos tienen un volumen de ventas destacado.\nEscribe una consulta SQL que muestre el nombre del producto y el total de unidades vendidas, pero solo para aquellos productos cuyo total supere las 500 unidades.\nUtilizá una expresión común (CTE, con WITH) para calcular primero el total de unidades vendidas por cada producto.\n\nTablas disponibles:\nproductos:\n- id (INT)\n- nombre (VARCHAR)\n- precio_unitario (DECIMAL)\n\nventas:\n- id (INT)\n- id_producto (INT)\n- cantidad (INT)\n- fecha (DATE)", expectedKeywords: ["WITH", "AS", "SELECT", "GROUP BY", "WHERE"], explanation: "Consultas avanzadas con expresiones comunes de tabla.", solutionCode: "WITH VentasTotales AS (\n  SELECT id_producto, SUM(cantidad) as total\n  FROM ventas\n  GROUP BY id_producto\n)\nSELECT p.nombre, v.total\nFROM productos p\nJOIN VentasTotales v ON p.id = v.id_producto\nWHERE v.total > 500;" },
-            { type: "single", prompt: "¿Qué restricción evita emails repetidos?", options: ["DEFAULT", "UNIQUE", "CHECK", "NOT NULL"], answer: 1, explanation: "UNIQUE garantiza que no existan duplicados." },
-            { type: "single", prompt: "PRIMARY KEY sirve para:", options: ["Permitir nulos", "Identificar filas de forma única", "Solo ordenar", "Crear copias"], answer: 1, explanation: "Es el identificador único irrepetible de la fila." },
-            { type: "single", prompt: "En el modelo ER, ¿qué es un atributo compuesto?", options: ["Uno que tiene varios valores", "Uno que se divide en sub-atributos (ej: domicilio en calle, num, ciudad)", "Un índice", "Una clave primaria"], answer: 1, explanation: "Permite mayor granularidad en el modelado." },
-            { type: "single", prompt: "¿Qué significa ACID?", options: ["Un framework", "Propiedades de transacciones", "Un tipo de join", "Modelo NoSQL"], answer: 1, explanation: "Atomicidad, Consistencia, Aislamiento, Durabilidad." },
-            { type: "single", prompt: "¿Para qué sirve FOREIGN KEY?", options: ["Integridad referencial", "Borrar tablas", "Contar filas", "Definir password"], answer: 0, explanation: "Garantiza que el valor exista en la tabla relacionada." }
+            {
+                type: "single",
+                prompt: "¿Qué comando SQL se usa para extraer datos de una base de datos?",
+                options: ["EXTRACT", "GET", "SELECT", "OPEN"],
+                answer: 2,
+                explanation: "SELECT es la instrucción base para consultas.",
+                kidExplanation: "Es como ir a una biblioteca y decirle al bibliotecario: '¡Selecciona todos los libros de dinosaurios!'."
+            },
+            {
+                type: "single",
+                prompt: "¿Cuál es la función de una Clave Primaria (Primary Key)?",
+                options: ["Ordenar la tabla", "Identificar de forma única cada fila", "Permitir valores nulos", "Vincular dos tablas"],
+                answer: 1,
+                explanation: "La PK garantiza unicidad por registro.",
+                kidExplanation: "La Clave Primaria es como tu número de identidad o tu huella digital: no hay nadie más en el mundo que tenga la misma."
+            }
         ],
         5: [
-            { type: "single", prompt: "¿Cuál es el propósito principal de Express.js?", options: ["Compilar código", "Construir CSS", "Facilitar servidores y rutas en Node.js", "Crear BD"], answer: 2, explanation: "Express es el framework web minimalista para Node." },
-            { type: "single", prompt: "¿Para qué se utiliza app.use() en Express?", options: ["Registrar middlewares globales", "Reiniciar servidor", "Solo para errores", "Enviar JSON"], answer: 0, explanation: "app.use aplica funciones a la cadena de procesamiento de la petición." },
-            { type: "single", prompt: "¿Cómo se aplica un middleware a una ruta específica?", options: ["Con app.use()", "En package.json", "Pasándolo como argumento en la ruta", "Con una variable global"], answer: 2, explanation: "router.get('/path', middleware, handler)." },
-            { type: "single", prompt: "¿Qué función tiene res.render()?", options: ["Guardar datos", "Aplicar CSS", "Renderizar una vista con un motor de plantillas", "Redirigir"], answer: 2, explanation: "Genera el HTML final a partir de un template (EJS, Pug, etc.)." },
-            { type: "single", prompt: "¿Dónde se ubican las vistas en un proyecto MVC estándar?", options: ["En controllers", "En la raíz", "En una carpeta llamada 'views'", "En node_modules"], answer: 2, explanation: "Convención de estructura de directorios." },
-            { type: "single", prompt: "¿Cuál es la función del controlador en MVC?", options: ["Renderizar JSON", "Almacenar CSS", "Gestionar lógica y conectar modelo con vista", "Dividir colores"], answer: 2, explanation: "Es el orquestador de la petición." },
-            { type: "single", prompt: "¿Qué método de Node permite leer un archivo JSON?", options: ["console.log", "JSON.stringify", "fs.readFile", "require('json-parse')"], answer: 2, explanation: "El módulo 'fs' maneja operaciones del sistema de archivos." },
-            { type: "single", prompt: "¿Qué desventaja tiene usar archivos JSON frente a bases de datos?", options: ["No se modifican", "Solo para frontend", "No manejan concurrencia ni escalabilidad eficiente", "Requieren internet"], answer: 2, explanation: "Un archivo no permite múltiples escrituras simultáneas seguras." },
-            { type: "single", prompt: "¿Qué define el archivo package.json como punto de entrada?", options: ["Propiedad 'main'", "Script 'start'", "Archivo .env", "Cualquier index.js"], answer: 0, explanation: "La propiedad 'main' indica qué archivo se carga al hacer require del paquete." },
-            { type: "single", prompt: "¿Qué ocurre si omites './' al importar un módulo local?", options: ["Node busca en node_modules", "Se borra el archivo", "Error de puerto", "No pasa nada"], answer: 0, explanation: "Sin el path relativo, Node cree que es una librería instalada." }
-        ],
-        6: [
-            { type: "single", prompt: "¿Qué devuelve normalmente una consulta a la base de datos en Node.js?", options: ["Un booleano", "Un objeto con filas y metadatos", "HTML renderizado", "Un archivo JSON"], answer: 1, explanation: "El driver devuelve una estructura con los resultados y estadísticas de la query." },
-            { type: "single", prompt: "¿Para qué se usan las consultas parametrizadas?", options: ["Aumentar velocidad", "Evitar inyecciones SQL", "Reducir tamaño", "Convertir a CSV"], answer: 1, explanation: "Separa la lógica SQL de los datos del usuario." },
-            { type: "single", prompt: "¿Cómo se debe manejar un error en una consulta SQL en Node?", options: ["Omitir validación", "Mostrar error al usuario", "Responder 200 siempre", "Capturar con try/catch o callback y gestionar"], answer: 3, explanation: "Previene caídas del servidor y permite respuestas controladas." },
-            { type: "single", prompt: "¿Cómo se implementa una transacción en Node con PostgreSQL (pg)?", options: ["fs.transaction()", "client.query('BEGIN'), luego queries, y 'COMMIT'/'ROLLBACK'", "app.listen()", "forEach"], answer: 1, explanation: "Control manual del flujo de transacción." },
-            { type: "single", prompt: "¿Para qué se usa Sequelize en Node.js?", options: ["Código en HTML", "Manejar archivos", "ORM para interactuar con BD usando modelos JS", "Gráficos"], answer: 2, explanation: "Abstrae el lenguaje SQL a métodos de objetos JavaScript." },
-            { type: "single", prompt: "¿Qué define Sequelize.STRING en un modelo?", options: ["Un JSON", "Un booleano", "Una columna de tipo VARCHAR", "Un autoincremental"], answer: 2, explanation: "Mapeo de tipos de datos." },
-            { type: "single", prompt: "¿Cómo se actualiza un registro en Sequelize?", options: ["Archivo .env", ".set() en vista", "Model.update(datos, { where: {id} })", "GET"], answer: 2, explanation: "Método del modelo para ejecución de UPDATE." },
-            { type: "single", prompt: "¿Qué implica una relación uno a uno?", options: ["Cada registro de A se relaciona con uno solo de B", "Múltiples valores", "Duplicación", "Es opcional siempre"], answer: 0, explanation: "Relación de unicidad bidireccional." },
-            { type: "single", prompt: "¿Para qué se usa belongsTo en Sequelize?", options: ["Indica que un modelo tiene la FK hacia otro", "Borra relaciones", "Define modelos sin FK", "Renombra atributos"], answer: 0, explanation: "Define el lado de la relación que porta la llave foránea." },
-            { type: "single", prompt: "¿Cómo se crea una relación muchos a muchos en Sequelize?", options: ["belongsToMany en ambos con opción 'through'", "Función map", "Sincronización manual", "Claves compuestas"], answer: 0, explanation: "Requiere una tabla intermedia definida en 'through'." },
-            { type: "single", prompt: "¿Por qué es vital usar WHERE en un DELETE?", options: ["Para buscar más rápido", "Para evitar borrar todos los registros", "Porque obliga a usar PK", "Para ordenar"], answer: 1, explanation: "Un DELETE sin WHERE vacía la tabla." },
-            { type: "single", prompt: "ACID en base de datos asegura:", options: ["Rapidez", "Transacciones seguras", "Bajo costo", "Sin duplicados"], answer: 1, explanation: "Garantiza integridad de datos ante fallos." }
-        ],
-        7: [
-            { type: "single", prompt: "¿Qué formato es el estándar para intercambio de datos en REST?", options: ["XML", "HTML", "CSV", "JSON"], answer: 3, explanation: "JSON es ligero, legible y nativo para JavaScript." },
-            { type: "single", prompt: "¿Cuál es el uso correcto del verbo PUT en REST?", options: ["Reemplazar un recurso por completo", "Obtener lista", "Actualización parcial", "Eliminar todo"], answer: 0, explanation: "PUT es semánticamente para reemplazo total; PATCH para parcial." },
-            { type: "single", prompt: "¿Cuál de estos verbos HTTP es 'seguro' (no modifica estado)?", options: ["POST", "DELETE", "GET", "PATCH"], answer: 2, explanation: "GET solo recupera información sin efectos secundarios." },
-            { type: "single", prompt: "¿Qué es serializar datos en una API?", options: ["Cifrar", "Validar", "Convertir objetos a JSON para envío", "Transformar a HTML"], answer: 2, explanation: "Proceso de convertir estructuras de datos en un formato transportable." },
-            { type: "single", prompt: "¿Qué representa un error HTTP 500?", options: ["Not Found", "Internal Server Error", "Unauthorized", "Forbidden"], answer: 1, explanation: "Fallo genérico del lado del servidor." },
-            { type: "single", prompt: "¿Cómo se define una ruta con parámetro dinámico en Express?", options: ["app.id()", "app.get('/usuarios/:id', ...)", "app.param()", "app.post()"], answer: 1, explanation: "Los dos puntos ':' marcan un parámetro accesible en req.params." },
-            { type: "single", prompt: "¿Qué es un JWT (JSON Web Token)?", options: ["Un archivo CSS", "Token con info firmada para autenticación", "Cabecera personalizada", "Cookie externa"], answer: 1, explanation: "Permite transmitir identidad de forma segura entre partes." },
-            { type: "single", prompt: "¿Qué hace la función jwt.verify()?", options: ["Crea clave", "Verifica validez e integridad del token", "Decodifica HTML", "Borra el token"], answer: 1, explanation: "Valida la firma usando la clave secreta." },
-            { type: "single", prompt: "¿Qué ayuda a prevenir ataques con tokens JWT?", options: ["No usar expiración", "Usar HTTPS y claves secretas robustas", "Firmas públicas", "Compartir por email"], answer: 1, explanation: "La seguridad del canal y la fortaleza de la firma son críticas." },
-            { type: "single", prompt: "¿Qué status usarías en una eliminación exitosa sin devolver contenido?", options: ["200", "201", "204", "404"], answer: 2, explanation: "204 No Content indica éxito sin body de respuesta." }
+            {
+                type: "single",
+                prompt: "En Express, ¿qué objeto se usa para enviar una respuesta al cliente?",
+                options: ["request", "res", "send", "client"],
+                answer: 1,
+                explanation: "res (response) maneja la salida del servidor.",
+                kidExplanation: "Imagina que el servidor es un camarero. El objeto 'res' es la bandeja donde te trae la comida que pediste."
+            },
+            {
+                type: "single",
+                prompt: "¿Qué hace el middleware body-parser?",
+                options: ["Limpia la base de datos", "Analiza el cuerpo de las peticiones entrantes", "Compila el código JS", "Envía archivos HTML"],
+                answer: 1,
+                explanation: "Permite leer los datos enviados en un POST.",
+                kidExplanation: "Es como alguien que recibe una carta, abre el sobre y te lee el mensaje para que no tengas que hacerlo tú."
+            }
         ]
     };
 
@@ -120,7 +135,6 @@
         },
         submitted: false
     };
-
 
     globalThis.AppModel = {
         MODULES,

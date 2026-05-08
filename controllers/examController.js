@@ -709,14 +709,16 @@
     }
 
     function renderQuestion() {
-        destroyEditor(); // Limpiar instancia anterior primero para evitar errores de DOM
+        destroyEditor(); 
 
         const q = state.questions[state.currentIndex];
         if (!q) return;
 
+        // Actualización de Metadatos (Badges)
         progressBadge.textContent = "Pregunta " + (state.currentIndex + 1) + "/" + state.questions.length;
         questionType.textContent = "Tipo: " + (q.type === "code" ? "Codigo" : "Seleccion multiple");
-        questionTitle.textContent = q.prompt;
+        
+        // Limpieza de paneles de información
         hintText.classList.add("hidden");
         hintText.textContent = q.hint || q.explanation || "Piensa en los conceptos base del modulo y responde paso a paso.";
         hintBtn.textContent = "Mostrar pista";
@@ -733,6 +735,31 @@
         codeCoachBox.innerHTML = "";
         lineByLineBox.classList.add("hidden");
         lineByLineBox.innerHTML = "";
+
+        // Crear contenedor sticky para el encabezado del ejercicio
+        const stickyHeader = document.createElement("div");
+        stickyHeader.className = "exam-header-sticky";
+        
+        const qTitle = document.createElement("h3");
+        qTitle.className = "question-title";
+        qTitle.textContent = q.prompt;
+        stickyHeader.appendChild(qTitle);
+
+        // Nueva sección: Explicación para niños dentro del sticky header
+        if (q.kidExplanation) {
+            const kidBox = document.createElement("div");
+            kidBox.className = "kid-explanation-box";
+            kidBox.innerHTML = `
+                <div class="kid-header">
+                    <span class="kid-icon">👶</span>
+                    <strong>Explicación simple (Nivel 10 años)</strong>
+                </div>
+                <p>${q.kidExplanation}</p>
+            `;
+            stickyHeader.appendChild(kidBox);
+        }
+
+        questionBody.appendChild(stickyHeader);
 
         if (q.type === "code") {
             runBtn.classList.remove("hidden");
@@ -939,6 +966,9 @@
 
             let syntaxOk = true;
             let syntaxMsg = "";
+            let semanticOk = true;
+            let semanticMsg = "";
+
             const promptText = (q.prompt || "").toLowerCase();
             const moduleId = state.module ? state.module.id : 0;
             const isSQL = moduleId === 4 || promptText.includes("sql") || promptText.includes("select") || promptText.includes("update") || promptText.includes("delete") || promptText.includes("insert");
@@ -950,17 +980,33 @@
                     syntaxMsg = "Falta el punto y coma (;) al final.";
                 } else if (!/^(SELECT|UPDATE|INSERT|DELETE|WITH|ALTER)\b/i.test(answer.trim())) {
                     syntaxOk = false;
-                    syntaxMsg = "Comando DML/DDL inválido.";
+                    syntaxMsg = "Comando DML/DDL inválido o mal estructurado.";
+                }
+                // Práctica semántica SQL: uso de alias si hay JOIN
+                if (normalized.includes("join") && !normalized.includes(" as ") && !/\w+\s+\w+/.test(normalized.split("join")[1])) {
+                    semanticOk = false;
+                    semanticMsg = "Buenas prácticas: Se recomienda usar alias claros para las tablas al hacer JOIN.";
                 }
             } else if (isHTML) {
                 const openTags = (answer.match(/</g) || []).length;
                 const closeTags = (answer.match(/>/g) || []).length;
                 if (openTags !== closeTags) {
                     syntaxOk = false;
-                    syntaxMsg = "Etiquetas HTML desbalanceadas (< >).";
+                    syntaxMsg = "Etiquetas HTML desbalanceadas.";
+                }
+                // Práctica semántica HTML
+                if (promptText.includes("semántica") && !/<\s*(main|header|footer|section|article|nav)\b/i.test(answer)) {
+                    semanticOk = false;
+                    semanticMsg = "Semántica: El ejercicio pide etiquetas semánticas y usaste etiquetas genéricas (como div).";
+                }
+                // Práctica CSS: rem vs px
+                if (promptText.includes("responsivo") && normalized.includes("font-size") && !normalized.includes("rem") && !normalized.includes("em")) {
+                    semanticOk = false;
+                    semanticMsg = "Buenas prácticas: Para fuentes responsivas, prefiere 'rem' o 'em' sobre 'px' para mejorar la accesibilidad.";
                 }
             } else {
                 try {
+                    // Evaluación lógica básica para JS: Intentar instanciar
                     new Function(answer);
                 } catch(e) {
                     syntaxOk = false;
@@ -969,24 +1015,27 @@
             }
 
             if (!syntaxOk) {
-                return { 
-                    ok: false, 
-                    msg: "Error sintáctico: " + syntaxMsg + (hasAll ? " Aunque usaste los elementos correctos, la sintaxis falla." : "")
-                };
+                return { ok: false, msg: "Error sintáctico: " + syntaxMsg };
+            }
+
+            if (!hasAll) {
+                return { ok: false, msg: "Lógica incompleta: Faltan elementos clave requeridos por el enunciado." };
+            }
+
+            if (!semanticOk) {
+                return { ok: true, msg: "Válido, pero con advertencia: " + semanticMsg };
             }
 
             return {
-                ok: hasAll,
-                msg: hasAll
-                    ? "Respuesta válida. Sintaxis y lógica correctas (Emulación Alkemy)."
-                    : "Sintaxis correcta, pero faltan palabras clave requeridas en la lógica de solución."
+                ok: true,
+                msg: "¡Excelente! Sintaxis, lógica y buenas prácticas validadas correctamente."
             };
         }
 
         const ok = answer === q.answer;
         return {
             ok,
-            msg: ok ? "Opcion correcta." : "Opcion incorrecta."
+            msg: ok ? "Opción correcta." : "Opción incorrecta."
         };
     }
 
@@ -1021,6 +1070,37 @@
 
         scoreLine.textContent = "Puntaje obtenido: " + correct + "/" + total + " (" + pct + "%)." + (auto ? " Envio automatico por tiempo agotado." : "");
         timeLine.textContent = "Tiempo usado vs total: " + formatTime(usedSeconds) + " / " + formatTime(state.timer.totalSeconds) + ".";
+
+        // Lógica de Siguiente Módulo Automático
+        const currentModuleIdx = MODULES.findIndex(m => m.id === state.module.id);
+        const nextModule = MODULES[currentModuleIdx + 1];
+
+        // Limpiar botones de navegación anteriores en el resultado si existen
+        const oldNextBtn = resultSection.querySelector(".next-module-action-btn");
+        if (oldNextBtn) oldNextBtn.remove();
+
+        if (nextModule) {
+            const nextBtnContainer = document.createElement("div");
+            nextBtnContainer.className = "next-module-container";
+            nextBtnContainer.style.marginTop = "2rem";
+            nextBtnContainer.style.textAlign = "center";
+
+            const nextActionBtn = document.createElement("button");
+            nextActionBtn.className = "btn btn-primary next-module-action-btn";
+            nextActionBtn.innerHTML = `Continuar al Módulo ${nextModule.id}: ${nextModule.name} ➔`;
+            nextActionBtn.onclick = () => {
+                startModule(nextModule.id);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            };
+
+            nextBtnContainer.appendChild(nextActionBtn);
+            feedbackList.after(nextBtnContainer);
+        } else {
+            const finalMsg = document.createElement("p");
+            finalMsg.className = "final-exam-msg";
+            finalMsg.innerHTML = "🏁 <strong>¡Has completado todos los módulos del examen!</strong>";
+            feedbackList.after(finalMsg);
+        }
 
         resultSection.classList.remove("hidden");
         resultSection.scrollIntoView({ behavior: "smooth", block: "start" });
