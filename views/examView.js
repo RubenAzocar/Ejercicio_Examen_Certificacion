@@ -29,6 +29,7 @@
     const checklistBox = document.getElementById("checklistBox");
     const codeCoachBox = document.getElementById("codeCoachBox");
     const lineByLineBox = document.getElementById("lineByLineBox");
+    const kidExplanationBox = document.getElementById("kidExplanationBox");
 
     const scoreLine = document.getElementById("scoreLine");
     const timeLine = document.getElementById("timeLine");
@@ -70,6 +71,7 @@
         checklistBox,
         codeCoachBox,
         lineByLineBox,
+        kidExplanationBox,
         scoreLine,
         timeLine,
         feedbackList,

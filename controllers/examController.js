@@ -26,6 +26,7 @@
         checklistBox,
         codeCoachBox,
         lineByLineBox,
+        kidExplanationBox,
         scoreLine,
         timeLine,
         feedbackList,
@@ -105,11 +106,11 @@
 
     function escapeHtml(text) {
         return String(text)
-            .replaceAll("&", "&amp;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;")
-            .replaceAll("\"", "&quot;")
-            .replaceAll("'", "&#039;");
+            .split("&").join("&amp;")
+            .split("<").join("&lt;")
+            .split(">").join("&gt;")
+            .split("\"").join("&quot;")
+            .split("'").join("&#039;");
     }
 
     function buildCodeLineGuide(q) {
@@ -479,6 +480,7 @@
             prompt: "Utilizando HTML y estilos, cree un bloque para una " + c.name + " responsive de nivel junior. Usa una paleta " + theme + " y aplica buenas practicas semanticas. Cumpla las siguientes condiciones:\n- " + c.hint,
             expectedKeywords: ["<", "</", "{"].concat(c.htmlKeywords).concat(c.cssKeywords),
             explanation: "Se evalua estructura HTML semantica, estilos CSS basicos y legibilidad del codigo.",
+            kidExplanation: "Imagina que estas construyendo una casita con bloques. Primero pones las paredes (HTML) y luego la pintas de colores (CSS). ¡Haz que se vea genial!",
             hint: c.hint,
             checklist: [
                 "Usa etiquetas HTML semanticas apropiadas.",
@@ -532,6 +534,7 @@
             prompt: challenge.task,
             expectedKeywords: challenge.expectedKeywords,
             explanation: "Se evalua uso correcto de SELECT, FROM, WHERE, JOIN, agregaciones (COUNT, AVG), GROUP BY, HAVING, ORDER BY y operaciones de insercion/actualizacion. Estructura clara y legibilidad.",
+            kidExplanation: "Imagina que tienes una caja gigante de dulces y quieres buscar solo los chocolates rojos. SQL es como pedirle al genio de los dulces que te los traiga ordenados.",
             hint: "Recuerda: 1) SELECT define columnas. 2) FROM indica tabla(s). 3) WHERE filtra filas. 4) JOIN relaciona tablas. 5) GROUP BY agrupa. 6) HAVING filtra grupos. 7) ORDER BY ordena. 8) LIMIT limita resultados.",
             checklist: [
                 "SELECT con columnas especificas o COUNT/AVG segun corresponda.",
@@ -564,6 +567,7 @@
             prompt: s.task,
             expectedKeywords: s.expectedKeywords,
             explanation: "Se evalua uso de metodos de array, asincronia y logica basica de JavaScript.",
+            kidExplanation: "Programar es como darle instrucciones a un robot muy obediente pero que no sabe nada. Tienes que decirle exactamente que hacer paso a paso.",
             hint: "Usa metodos modernos como filter, map o reduce para un codigo mas limpio."
         };
     }
@@ -582,7 +586,7 @@
         const moduleCfg = MODULES.find((m) => m.id === moduleId);
         if (!moduleCfg) return [];
 
-        const basePool = structuredClone(BASE_QUESTION_BANK[moduleId] || []);
+        const basePool = JSON.parse(JSON.stringify(BASE_QUESTION_BANK[moduleId] || []));
 
         // Modulos con codigo reciben retos dinamicos adicionales en cada recarga.
         const generated = [];
@@ -682,6 +686,7 @@
 
         if (e.key.toLowerCase() === "h") toggleHint();
         if (e.key.toLowerCase() === "e") explainCurrentQuestion();
+        if (e.key.toLowerCase() === "k") toggleKidExplanation();
         if (e.key.toLowerCase() === "s") toggleSolution();
         
         if (e.key === "ArrowRight" && !nextBtn.disabled) {
@@ -720,6 +725,12 @@
         progressBadge.textContent = "Pregunta " + (state.currentIndex + 1) + "/" + state.questions.length;
         questionType.textContent = "Tipo: " + (q.type === "code" ? "Codigo" : "Seleccion multiple");
         
+        // Resetear botón de explicación simple
+        kidExplainBtn.classList.add("hidden");
+        kidExplainBtn.textContent = "👶 Simple";
+        if (q.kidExplanation) {
+            kidExplainBtn.classList.remove("hidden");
+        }
         // Limpieza de paneles de información
         hintText.classList.add("hidden");
         hintText.textContent = q.hint || q.explanation || "Piensa en los conceptos base del modulo y responde paso a paso.";
@@ -729,6 +740,8 @@
         solutionBtn.textContent = "Ver solución";
         runResultBox.classList.add("hidden");
         runResultBox.innerHTML = "";
+        kidExplanationBox.classList.add("hidden");
+        kidExplanationBox.innerHTML = "";
 
         questionBody.innerHTML = "";
         checklistBox.innerHTML = "";
@@ -747,19 +760,15 @@
         qTitle.textContent = q.prompt;
         stickyHeader.appendChild(qTitle);
 
-        // Nueva sección: Explicación simple (oculta por defecto)
+        // Preparar sección: Explicación simple
         if (q.kidExplanation) {
-            const kidBox = document.createElement("div");
-            kidBox.id = "kidExplanationBox";
-            kidBox.className = "kid-explanation-box hidden";
-            kidBox.innerHTML = `
+            kidExplanationBox.innerHTML = `
                 <div class="kid-header">
                     <span class="kid-icon">👶</span>
                     <strong>Explicación simple</strong>
                 </div>
                 <p>${q.kidExplanation}</p>
             `;
-            stickyHeader.appendChild(kidBox);
         }
 
         questionBody.appendChild(stickyHeader);
@@ -891,7 +900,14 @@
     function toggleHint() {
         hintText.classList.toggle("hidden");
         hintBtn.textContent = hintText.classList.contains("hidden") ? "Mostrar pista" : "Ocultar pista";
-        if (!hintText.classList.contains("hidden")) solutionBox.classList.add("hidden");
+        if (!hintText.classList.contains("hidden")) {
+            solutionBox.classList.add("hidden");
+            solutionBtn.textContent = "Ver solución";
+            if (kidExplanationBox) {
+                kidExplanationBox.classList.add("hidden");
+                kidExplainBtn.textContent = "👶 Simple";
+            }
+        }
     }
 
     function toggleSolution() {
@@ -928,6 +944,13 @@
         solutionBox.appendChild(explanation);
         solutionBox.classList.remove("hidden");
         hintText.classList.add("hidden");
+        hintBtn.textContent = "Mostrar pista";
+        
+        if (kidExplanationBox) {
+            kidExplanationBox.classList.add("hidden");
+            kidExplainBtn.textContent = "👶 Simple";
+        }
+        
         solutionBtn.textContent = "Ocultar solución";
     }
 
@@ -937,18 +960,28 @@
         hintText.textContent = buildQuestionExplanation(q);
         hintText.classList.remove("hidden");
         hintBtn.textContent = "Ocultar pista";
+        
+        solutionBox.classList.add("hidden");
+        solutionBtn.textContent = "Ver solución";
+        
+        if (kidExplanationBox) {
+            kidExplanationBox.classList.add("hidden");
+            kidExplainBtn.textContent = "👶 Simple";
+        }
+        
         sideAdhoc.textContent = "Modo explicacion activa: revisa la logica y vuelve a intentar sin memorizar la opcion.";
     }
 
     function toggleKidExplanation() {
-        const kidBox = document.getElementById("kidExplanationBox");
-        if (!kidBox) return;
+        if (!kidExplanationBox) return;
         
-        const isHidden = kidBox.classList.toggle("hidden");
+        const isHidden = kidExplanationBox.classList.toggle("hidden");
         kidExplainBtn.textContent = isHidden ? "👶 Simple" : "👶 Ocultar";
         if (!isHidden) {
             hintText.classList.add("hidden");
+            hintBtn.textContent = "Mostrar pista";
             solutionBox.classList.add("hidden");
+            solutionBtn.textContent = "Ver solución";
         }
     }
 
