@@ -772,6 +772,15 @@
         }
 
         questionBody.appendChild(stickyHeader);
+        
+        // Mover los paneles de ayuda y feedback dentro del flujo de questionBody
+        questionBody.appendChild(hintText);
+        questionBody.appendChild(kidExplanationBox);
+        questionBody.appendChild(solutionBox);
+        questionBody.appendChild(runResultBox);
+        questionBody.appendChild(checklistBox);
+        questionBody.appendChild(codeCoachBox);
+        questionBody.appendChild(lineByLineBox);
 
         if (q.type === "code") {
             runBtn.classList.remove("hidden");
