@@ -21,6 +21,7 @@
         runResultBox,
         hintBtn,
         explainBtn,
+        kidExplainBtn,
         hintText,
         checklistBox,
         codeCoachBox,
@@ -668,6 +669,7 @@
 
     // Inicialización de eventos globales (solo una vez)
     solutionBtn.addEventListener("click", toggleSolution);
+    kidExplainBtn.addEventListener("click", toggleKidExplanation);
     document.addEventListener("keydown", handleGlobalKeys);
 
     function handleGlobalKeys(e) {
@@ -745,32 +747,19 @@
         qTitle.textContent = q.prompt;
         stickyHeader.appendChild(qTitle);
 
-        // Nueva sección: Explicación para niños dentro del sticky header
+        // Nueva sección: Explicación simple (oculta por defecto)
         if (q.kidExplanation) {
             const kidBox = document.createElement("div");
-            kidBox.className = "kid-explanation-box";
+            kidBox.id = "kidExplanationBox";
+            kidBox.className = "kid-explanation-box hidden";
             kidBox.innerHTML = `
                 <div class="kid-header">
-                    <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <span class="kid-icon">👶</span>
-                        <strong>Explicación simple (Nivel 10 años)</strong>
-                    </div>
-                    <button class="btn-toggle-kid" id="toggleKidBtn">Ver explicación</button>
+                    <span class="kid-icon">👶</span>
+                    <strong>Explicación simple</strong>
                 </div>
-                <p id="kidExplanationText" class="hidden">${q.kidExplanation}</p>
+                <p>${q.kidExplanation}</p>
             `;
-            
             stickyHeader.appendChild(kidBox);
-
-            // Listener para el botón de toggle
-            const toggleBtn = kidBox.querySelector("#toggleKidBtn");
-            const kidText = kidBox.querySelector("#kidExplanationText");
-            
-            toggleBtn.addEventListener("click", () => {
-                const isHidden = kidText.classList.toggle("hidden");
-                toggleBtn.textContent = isHidden ? "Ver explicación" : "Ocultar explicación";
-                toggleBtn.classList.toggle("active", !isHidden);
-            });
         }
 
         questionBody.appendChild(stickyHeader);
@@ -949,6 +938,18 @@
         hintText.classList.remove("hidden");
         hintBtn.textContent = "Ocultar pista";
         sideAdhoc.textContent = "Modo explicacion activa: revisa la logica y vuelve a intentar sin memorizar la opcion.";
+    }
+
+    function toggleKidExplanation() {
+        const kidBox = document.getElementById("kidExplanationBox");
+        if (!kidBox) return;
+        
+        const isHidden = kidBox.classList.toggle("hidden");
+        kidExplainBtn.textContent = isHidden ? "👶 Simple" : "👶 Ocultar";
+        if (!isHidden) {
+            hintText.classList.add("hidden");
+            solutionBox.classList.add("hidden");
+        }
     }
 
     function pauseTimer() {

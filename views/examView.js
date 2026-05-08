@@ -20,6 +20,7 @@
     const finishBtn = document.getElementById("finishBtn");
     const hintBtn = document.getElementById("hintBtn");
     const explainBtn = document.getElementById("explainBtn");
+    const kidExplainBtn = document.getElementById("kidExplainBtn");
     const solutionBtn = document.getElementById("solutionBtn");
     const runBtn = document.getElementById("runBtn");
     const runResultBox = document.getElementById("runResultBox");
@@ -62,6 +63,7 @@
         runResultBox,
         hintBtn,
         explainBtn,
+        kidExplainBtn,
         solutionBtn,
         hintText,
         solutionBox,
