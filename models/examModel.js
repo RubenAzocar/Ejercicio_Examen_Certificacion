@@ -19,7 +19,7 @@
                 options: ["Aplicar únicamente etiquetas <meta> sin ajustes en CSS", "Uso exclusivo de imágenes PNG", "Utilizar position: fixed en todos los elementos", "Uso de @media queries para ajustar estilos según el viewport"], 
                 answer: 3, 
                 explanation: "Las Media Queries son la base del Responsive Web Design.",
-                kidExplanation: "Imagina que tu página web es como plastilina: con las 'media queries' le dices cómo cambiar de forma para que quepa bien en un teléfono pequeño o en una tele gigante."
+                kidExplanation: "Imagina que tu página web es como plastilina mágica: con las 'media queries' le das instrucciones para que sepa cómo cambiar de forma. Si detecta un teléfono pequeño, se estira de una forma; si es una tele gigante, se acomoda de otra. \n\n**¿Cómo lo haces?** Escribes `@media` y pones la condición (como el ancho máximo) para que los estilos solo funcionen en ese tamaño."
             },
             { 
                 type: "single", 
@@ -27,7 +27,7 @@
                 options: ["Porcentaje (%)", "Centímetros (cm)", "rem", "em", "Píxeles (px)"], 
                 answer: 2, 
                 explanation: "rem es ideal ya que escala respecto al tamaño de fuente raíz.",
-                kidExplanation: "El 'rem' es como una regla mágica: si cambias el tamaño de la letra de toda la casa, todas las habitaciones se ajustan solitas usando esa misma medida."
+                kidExplanation: "El 'rem' es como una regla maestra. En lugar de decir 'mide 20 píxeles', dices 'mide 2 veces el tamaño base'. Si cambias el tamaño base, ¡todo el diseño se ajusta mágicamente a la vez!"
             },
             {
                 type: "single",
@@ -61,7 +61,7 @@
                 options: ["array", "object", "list", "undefined"], 
                 answer: 1, 
                 explanation: "En JS, los arrays son técnicamente objetos.",
-                kidExplanation: "En JavaScript, una lista de cosas es como una caja de juguetes. Si le preguntas qué es, te dirá que es un 'objeto' (una caja), aunque por dentro tenga muchos carritos."
+                kidExplanation: "En JavaScript, una lista de cosas es como una caja de juguetes. Si le preguntas qué es, te dirá que es un 'objeto' (una caja). \n\n**¿Por qué importa?** Porque al ser objetos, tienen trucos especiales (métodos) para buscar, sacar o meter cosas dentro de la caja."
             },
             {
                 type: "single",
@@ -76,7 +76,7 @@
                 prompt: "Escribe una función llamada 'saludar' que reciba un nombre y devuelva 'Hola ' + nombre.",
                 expectedKeywords: ["function", "saludar", "return", "Hola"],
                 explanation: "Definición básica de funciones y retorno de strings.",
-                kidExplanation: "Crea un robot llamado 'saludar' que cuando le digas un nombre, te responda con un saludo amable.",
+                kidExplanation: "Crea un robot llamado 'saludar' que tenga un botón de 'nombre'. Cuando alguien presione el botón y le de un nombre, el robot debe construir una frase que diga 'Hola' seguido de ese nombre y entregársela al usuario con `return`.",
                 solutionCode: "function saludar(nombre) {\n  return 'Hola ' + nombre;\n}"
             }
         ],
@@ -87,7 +87,7 @@
                 options: ["EXTRACT", "GET", "SELECT", "OPEN"],
                 answer: 2,
                 explanation: "SELECT es la instrucción base para consultas.",
-                kidExplanation: "Es como ir a una biblioteca y decirle al bibliotecario: '¡Selecciona todos los libros de dinosaurios!'."
+                kidExplanation: "Es como ir a una biblioteca mágica y decirle al bibliotecario: '¡SELECT todos los libros de dinosaurios!'. \n\n**Paso a paso:** Usas `SELECT` para decir qué quieres ver, `FROM` para decir en qué estante buscar, y `WHERE` si quieres filtrar solo los que tienen dibujos."
             },
             {
                 type: "single",

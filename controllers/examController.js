@@ -480,7 +480,7 @@
             prompt: "Utilizando HTML y estilos, cree un bloque para una " + c.name + " responsive de nivel junior. Usa una paleta " + theme + " y aplica buenas practicas semanticas. Cumpla las siguientes condiciones:\n- " + c.hint,
             expectedKeywords: ["<", "</", "{"].concat(c.htmlKeywords).concat(c.cssKeywords),
             explanation: "Se evalua estructura HTML semantica, estilos CSS basicos y legibilidad del codigo.",
-            kidExplanation: "Imagina que estas construyendo una casita con bloques. Primero pones las paredes (HTML) y luego la pintas de colores (CSS). ¡Haz que se vea genial!",
+            kidExplanation: "Imagina que HTML es el esqueleto y los ladrillos de tu casa (donde decides qué es una ventana o una puerta). CSS es la pintura y la decoración. \n\n**¿Cómo empezar?** \n1. Usa etiquetas como `<div>` para crear cajas. \n2. Usa CSS para darles color, tamaño y bordes. \n3. ¡Asegúrate de que todo esté bien ordenado para que los visitantes no se pierdan!",
             hint: c.hint,
             checklist: [
                 "Usa etiquetas HTML semanticas apropiadas.",
@@ -534,7 +534,7 @@
             prompt: challenge.task,
             expectedKeywords: challenge.expectedKeywords,
             explanation: "Se evalua uso correcto de SELECT, FROM, WHERE, JOIN, agregaciones (COUNT, AVG), GROUP BY, HAVING, ORDER BY y operaciones de insercion/actualizacion. Estructura clara y legibilidad.",
-            kidExplanation: "Imagina que tienes una caja gigante de dulces y quieres buscar solo los chocolates rojos. SQL es como pedirle al genio de los dulces que te los traiga ordenados.",
+            kidExplanation: "Es como usar un buscador mágico en una libreta de contactos. \n\n1. Con **SELECT** eliges qué columnas quieres ver (como el nombre o el teléfono). \n2. Con **FROM** dices en qué página (tabla) buscar. \n3. Con **WHERE** filtras para que solo te de el contacto que tiene exactamente ese número de identificación.",
             hint: "Recuerda: 1) SELECT define columnas. 2) FROM indica tabla(s). 3) WHERE filtra filas. 4) JOIN relaciona tablas. 5) GROUP BY agrupa. 6) HAVING filtra grupos. 7) ORDER BY ordena. 8) LIMIT limita resultados.",
             checklist: [
                 "SELECT con columnas especificas o COUNT/AVG segun corresponda.",
@@ -771,9 +771,8 @@
             `;
         }
 
-        questionBody.appendChild(stickyHeader);
-        
-        // Mover los paneles de ayuda y feedback dentro del flujo de questionBody
+        // Los paneles de ayuda se inyectan ANTES del encabezado sticky para que al hacer scroll
+        // salgan de la vista antes de que el título se fije, evitando superposiciones visuales.
         questionBody.appendChild(hintText);
         questionBody.appendChild(kidExplanationBox);
         questionBody.appendChild(solutionBox);
@@ -781,6 +780,8 @@
         questionBody.appendChild(checklistBox);
         questionBody.appendChild(codeCoachBox);
         questionBody.appendChild(lineByLineBox);
+
+        questionBody.appendChild(stickyHeader);
 
         if (q.type === "code") {
             runBtn.classList.remove("hidden");
